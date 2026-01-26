@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Instagram, Facebook, Search, ShoppingBag, Menu, X } from 'lucide-react';
 import { NAV_ITEMS } from '../types';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ScallopedBorder } from './ScallopedBorder';
+// import { ScallopedBorder } from './ScallopedBorder';
 
 
 export const Header: React.FC = () => {
@@ -114,10 +114,7 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Decorative Scalloped Edge */}
-      <div className="absolute bottom-0 w-full transform translate-y-[99%] text-cream">
-        <ScallopedBorder position="bottom" color="#F9F7F2" />
-      </div>
+      {/* Decorative Scalloped Edge supprimée */}
     </header>
   );
 };
