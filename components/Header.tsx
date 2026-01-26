@@ -113,6 +113,14 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Decorative Scalloped Edge supprimée */}
+      {/* Bordure scalloped décorative en bas du header */}
+      <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none">
+        <div className="w-full">
+          <svg className="block w-full h-[16px] md:h-[24px]" viewBox="0 0 1200 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 Q12,24 24,0 Q36,24 48,0 Q60,24 72,0 Q84,24 96,0 Q108,24 120,0 Q132,24 144,0 Q156,24 168,0 Q180,24 192,0 Q204,24 216,0 Q228,24 240,0 Q252,24 264,0 Q276,24 288,0 Q300,24 312,0 Q324,24 336,0 Q348,24 360,0 Q372,24 384,0 Q396,24 408,0 Q420,24 432,0 Q444,24 456,0 Q468,24 480,0 Q492,24 504,0 Q516,24 528,0 Q540,24 552,0 Q564,24 576,0 Q588,24 600,0 Q612,24 624,0 Q636,24 648,0 Q660,24 672,0 Q684,24 696,0 Q708,24 720,0 Q732,24 744,0 Q756,24 768,0 Q780,24 792,0 Q804,24 816,0 Q828,24 840,0 Q852,24 864,0 Q876,24 888,0 Q900,24 912,0 Q924,24 936,0 Q948,24 960,0 Q972,24 984,0 Q996,24 1008,0 Q1020,24 1032,0 Q1044,24 1056,0 Q1068,24 1080,0 Q1092,24 1104,0 Q1116,24 1128,0 Q1140,24 1152,0 Q1164,24 1176,0 Q1188,24 1200,0" fill="none" stroke="#222" strokeWidth="24" />
+          </svg>
+        </div>
+      </div>
     </header>
   );
 };
