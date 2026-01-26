@@ -20,9 +20,9 @@ export const Header: React.FC = () => {
 
   return (
     <header className="relative w-full bg-cream z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-1">
         {/* Top Row: Socials - Logo - Cart */}
-        <div className="flex justify-between items-center h-20 md:h-32">
+        <div className="flex justify-between items-center h-14 md:h-20">
           
           {/* Left: Social Icons (Desktop) / Hamburger (Mobile) */}
           <div className="flex-1 flex items-center justify-start gap-4">
@@ -44,10 +44,10 @@ export const Header: React.FC = () => {
             className="flex-shrink-0 flex flex-col items-center justify-center cursor-pointer group"
             onClick={() => handleNavClick('home')}
           >
-            <h1 className="font-logo text-3xl md:text-5xl lg:text-6xl tracking-widest text-charcoal uppercase group-hover:text-terracotta transition-colors duration-500">
+            <h1 className="font-logo text-xl md:text-3xl lg:text-4xl tracking-widest text-charcoal uppercase group-hover:text-terracotta transition-colors duration-500">
               Karaz Hana
             </h1>
-            <span className="text-xs md:text-sm font-sans tracking-[0.3em] text-sage mt-2 uppercase">
+            <span className="text-[10px] md:text-xs font-sans tracking-[0.2em] text-sage mt-1 uppercase">
               Aquarelle & Poésie
             </span>
           </div>
@@ -68,8 +68,8 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Bottom Row: Navigation (Desktop) */}
-        <nav className="hidden md:flex justify-center items-center py-6 mt-2">
-          <ul className="flex space-x-12">
+        <nav className="hidden md:flex justify-center items-center py-2 mt-0">
+          <ul className="flex space-x-6">
             {NAV_ITEMS.map((item) => (
               <li key={item.id}>
                 <button
@@ -97,20 +97,20 @@ export const Header: React.FC = () => {
           ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
-        <nav className="flex flex-col gap-8 text-center">
+        <nav className="flex flex-col gap-4 text-center">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
-              className="text-2xl font-serif text-charcoal hover:text-terracotta transition-colors"
+              className="text-lg font-serif text-charcoal hover:text-terracotta transition-colors"
             >
               {item.label}
             </button>
           ))}
         </nav>
-        <div className="mt-12 flex gap-6 text-charcoal">
-          <Instagram size={24} />
-          <Facebook size={24} />
+        <div className="mt-6 flex gap-4 text-charcoal">
+          <Instagram size={20} />
+          <Facebook size={20} />
         </div>
       </div>
 
