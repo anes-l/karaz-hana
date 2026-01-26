@@ -1,11 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-interface HomeProps {
-    onNavigate: (page: any) => void;
-}
-
-export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
+export const Home: React.FC = () => {
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -48,13 +44,13 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                Mes œuvres sont des fenêtres ouvertes sur des jardins imaginaires où le temps se suspend.
              </p>
 
-             <button 
-                onClick={() => onNavigate('universe')}
+             <a 
+                href="/universe"
                 className="group flex items-center gap-3 text-sm font-medium uppercase tracking-widest text-charcoal hover:text-terracotta transition-colors"
              >
                Découvrir mon univers
                <span className="block w-8 h-[1px] bg-charcoal group-hover:w-12 group-hover:bg-terracotta transition-all duration-300"></span>
-             </button>
+             </a>
           </div>
 
           {/* Background Text Decoration */}

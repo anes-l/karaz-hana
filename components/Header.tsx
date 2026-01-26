@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Instagram, Facebook, Search, ShoppingBag, Menu, X } from 'lucide-react';
-import { Page, NAV_ITEMS } from '../types';
+import { NAV_ITEMS } from '../types';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ScallopedBorder } from './ScallopedBorder';
 
-interface HeaderProps {
-  currentPage: Page;
-  onNavigate: (page: Page) => void;
-}
 
-export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
+export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const handleNavClick = (page: Page) => {
-    onNavigate(page);
+  // Déduit la page courante à partir de l'URL
+  const currentPath = location.pathname.replace(/^\//, '') || 'shop';
+
+  const handleNavClick = (page: string) => {
+    navigate(page === 'home' ? '/home' : `/${page}`);
     setMobileMenuOpen(false);
   };
 
@@ -40,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
           {/* Center: Logo */}
           <div 
             className="flex-shrink-0 flex flex-col items-center justify-center cursor-pointer group"
-            onClick={() => onNavigate('home')}
+            onClick={() => handleNavClick('home')}
           >
             <h1 className="font-logo text-3xl md:text-5xl lg:text-6xl tracking-widest text-charcoal uppercase group-hover:text-terracotta transition-colors duration-500">
               Karaz Hana
@@ -54,7 +56,7 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
           <div className="flex-1 flex items-center justify-end gap-4">
             <button 
               className="relative p-2 text-charcoal hover:text-terracotta transition-colors"
-              onClick={() => onNavigate('shop')}
+              onClick={() => handleNavClick('shop')}
             >
               <ShoppingBag size={20} />
               <span className="absolute top-1 right-0 h-2 w-2 bg-terracotta rounded-full"></span>
@@ -74,11 +76,11 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
                   onClick={() => handleNavClick(item.id)}
                   className={`
                     text-sm uppercase tracking-[0.2em] font-light transition-all duration-300 relative
-                    ${currentPage === item.id ? 'text-charcoal font-normal' : 'text-charcoal/60 hover:text-terracotta'}
+                    ${currentPath === item.id ? 'text-charcoal font-normal' : 'text-charcoal/60 hover:text-terracotta'}
                   `}
                 >
                   {item.label}
-                  {currentPage === item.id && (
+                  {currentPath === item.id && (
                     <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-terracotta rounded-full"></span>
                   )}
                 </button>
