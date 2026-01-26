@@ -22,10 +22,10 @@ export const Header: React.FC = () => {
     <header className="relative w-full bg-cream z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-1">
         {/* Top Row: Socials - Logo - Cart */}
-        <div className="flex justify-between items-center h-14 md:h-20">
+        <div className="grid grid-cols-3 items-center h-14 md:h-20">
           
           {/* Left: Social Icons (Desktop) / Hamburger (Mobile) */}
-          <div className="flex-1 flex items-center justify-start gap-4">
+          <div className="flex items-center justify-start gap-4">
             <button 
               className="md:hidden p-2 text-charcoal"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -41,19 +41,17 @@ export const Header: React.FC = () => {
 
           {/* Center: Logo */}
           <div 
-            className="flex-shrink-0 flex flex-col items-center justify-center cursor-pointer group"
+            className="flex flex-col items-center justify-center cursor-pointer group mx-auto"
             onClick={() => handleNavClick('home')}
           >
-            <h1 className="font-logo text-xl md:text-3xl lg:text-4xl tracking-widest text-charcoal uppercase group-hover:text-terracotta transition-colors duration-500">
+            <h1 className="font-logo text-xl md:text-3xl lg:text-4xl tracking-widest text-charcoal uppercase group-hover:text-terracotta transition-colors duration-500 text-center">
               Karaz Hana
             </h1>
-            <span className="text-[10px] md:text-xs font-sans tracking-[0.2em] text-sage mt-1 uppercase">
-              Aquarelle & Poésie
-            </span>
+            {/* Sous-titre supprimé */}
           </div>
 
           {/* Right: Cart & Account */}
-          <div className="flex-1 flex items-center justify-end gap-4">
+          <div className="flex items-center justify-end gap-4">
             <button 
               className="relative p-2 text-charcoal hover:text-terracotta transition-colors"
               onClick={() => handleNavClick('shop')}
