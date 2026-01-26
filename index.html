@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Karaz Hana | Artiste Aquarelliste</title>
+    <meta name="description" content="Portfolio et boutique de l'artiste Karaz Hana." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importing Outfit for body text and Cormorant Garamond to simulate the elegant 'Distrela' vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: '#F9F7F2',
+              'cream-dark': '#EBE5D9',
+              charcoal: '#4A4A4A',
+              sage: '#8DA399',
+              'dusty-pink': '#E8DCD8',
+              'terracotta': '#C88D83',
+            },
+            fontFamily: {
+              sans: ['Outfit', 'sans-serif'],
+              serif: ['Cormorant Garamond', 'serif'],
+              logo: ['Cormorant Garamond', 'serif'], // Fallback for Distrela
+            },
+            backgroundImage: {
+              'paper-texture': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #F9F7F2;
+        color: #4A4A4A;
+      }
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+      /* Custom utility for the scalloped edge if needed via CSS, though we use SVG in React */
+      .scalloped-bottom {
+         --mask: radial-gradient(12px at 50% 16px,#0000 98%,#000) 50% calc(100% - 16px)/24px 100% repeat-x,
+                 radial-gradient(12px at 50% -8px,#0000 98%,#000) 50% calc(100% + 8px)/24px 100% repeat-x;
+         -webkit-mask: var(--mask);
+         mask: var(--mask);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
