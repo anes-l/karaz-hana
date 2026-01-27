@@ -1,4 +1,4 @@
-export type Page = 'home' | 'shop' | 'books' | 'universe' | 'contact';
+export type Page = 'accueil' | 'boutique' | 'ateliers' | 'contact';
 
 export interface NavItem {
   id: Page;
@@ -6,9 +6,8 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { id: 'home', label: 'Accueil' },
-  { id: 'shop', label: 'Boutique' },
-  { id: 'books', label: 'Livres' },
-  { id: 'universe', label: 'Mon Univers' },
+  { id: 'accueil', label: 'Accueil' },
+  { id: 'boutique', label: 'Boutique' },
+  { id: 'ateliers', label: 'Ateliers' },
   { id: 'contact', label: 'Contact' },
 ];
