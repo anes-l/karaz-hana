@@ -186,6 +186,133 @@ export const Ateliers: React.FC = () => {
                 </div>
             </section>
 
+            {/* Ateliers Personnalisés */}
+            <section className="py-24 md:py-32 px-4 bg-gradient-to-br from-sage/5 via-cream to-dusty-pink/10 relative overflow-hidden">
+                {/* Éléments décoratifs d'arrière-plan */}
+                <div className="absolute top-10 left-10 opacity-10">
+                    <svg width="120" height="120" viewBox="0 0 120 120" className="text-sage">
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="5,5" />
+                    </svg>
+                </div>
+                <div className="absolute bottom-20 right-10 opacity-10">
+                    <svg width="80" height="80" viewBox="0 0 80 80" className="text-terracotta">
+                        <path d="M10,40 Q40,10 70,40 Q40,70 10,40" fill="none" stroke="currentColor" strokeWidth="1" />
+                    </svg>
+                </div>
+
+                <div className="max-w-5xl mx-auto relative">
+                    {/* Titre artistique */}
+                    <div className="text-center mb-20">
+                        <div className="inline-flex items-center gap-3 mb-6">
+                            <svg width="50" height="20" viewBox="0 0 50 20" className="text-terracotta/40">
+                                <path d="M0,10 C10,0 20,20 30,10 C40,0 50,10 50,10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                            <span className="text-terracotta/70 text-xs uppercase tracking-[0.4em] font-medium">Sur mesure</span>
+                            <svg width="50" height="20" viewBox="0 0 50 20" className="text-terracotta/40 rotate-180">
+                                <path d="M0,10 C10,0 20,20 30,10 C40,0 50,10 50,10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                        </div>
+                        <h2 className="font-serif text-4xl md:text-6xl text-charcoal mb-6 leading-tight">
+                            Un atelier<br />
+                            <span className="italic text-terracotta/80">rien que pour vous</span>
+                        </h2>
+                        <p className="font-sans text-charcoal/50 max-w-md mx-auto text-sm md:text-base leading-relaxed">
+                            Envie d'un moment créatif unique ? Je crée des ateliers sur mesure pour vos occasions spéciales.
+                        </p>
+                    </div>
+
+                    {/* Cartes style carnet de croquis */}
+                    <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+                        {[
+                            {
+                                title: 'Anniversaire',
+                                description: 'Célébrez avec un atelier créatif mémorable entre proches.',
+                                rotation: -3,
+                                bg: 'bg-amber-50/60',
+                                svg: <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-terracotta/60"><circle cx="20" cy="25" r="12" /><path d="M20 13 L20 5 M14 8 L14 4 M26 8 L26 4" /><path d="M20 5 C20 3 22 2 22 2 M14 4 C14 2 16 1 16 1 M26 4 C26 2 28 1 28 1" /></svg>
+                            },
+                            {
+                                title: 'Entre amis',
+                                description: 'Un moment de partage et de créativité pour renforcer vos liens.',
+                                rotation: 2,
+                                bg: 'bg-rose-50/50',
+                                svg: <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-terracotta/60"><circle cx="12" cy="15" r="6" /><circle cx="28" cy="15" r="6" /><path d="M6 35 C6 25 18 25 20 25 C22 25 34 25 34 35" /></svg>
+                            },
+                            {
+                                title: 'EVJF / EVG',
+                                description: 'Une activité originale pour fêter les futurs mariés.',
+                                rotation: -1.5,
+                                bg: 'bg-orange-50/40',
+                                svg: <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-terracotta/60"><path d="M20 35 L8 20 C4 14 8 6 16 10 L20 15 L24 10 C32 6 36 14 32 20 Z" /></svg>
+                            }
+                        ].map((item, i) => (
+                            <div
+                                key={i}
+                                className={`${item.bg} w-64 p-8 relative group cursor-pointer`}
+                                style={{
+                                    transform: `rotate(${item.rotation}deg)`,
+                                    boxShadow: '6px 6px 0 rgba(0,0,0,0.05)'
+                                }}
+                            >
+                                {/* Bord façon papier déchiré */}
+                                <div className="absolute inset-0 border-2 border-charcoal/5" />
+
+                                {/* Coin plié */}
+                                <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-br from-white/80 to-transparent"
+                                    style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}
+                                />
+
+                                {/* Contenu */}
+                                <div className="text-center">
+                                    <div className="flex justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                                        {item.svg}
+                                    </div>
+                                    <h3 className="font-serif text-xl text-charcoal mb-3">
+                                        {item.title}
+                                    </h3>
+                                    <div className="w-12 h-[1px] bg-terracotta/30 mx-auto mb-4" />
+                                    <p className="font-sans text-charcoal/60 text-sm leading-relaxed">
+                                        {item.description}
+                                    </p>
+                                </div>
+
+                                {/* Petit dessin décoratif en bas */}
+                                <div className="absolute bottom-3 right-3 opacity-20 group-hover:opacity-40 transition-opacity">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" className="text-terracotta">
+                                        <path d="M12,2 L12,22 M2,12 L22,12" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                                        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                                    </svg>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Autres options + CTA */}
+                    <div className="text-center mt-20">
+                        <div className="inline-flex flex-wrap justify-center gap-4 mb-8">
+                            {['Team building', 'Retraite bien-être', "Événement d'entreprise"].map((tag, i) => (
+                                <span
+                                    key={i}
+                                    className="px-4 py-2 bg-white/60 text-charcoal/50 text-xs uppercase tracking-widest rounded-full border border-charcoal/10"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                        <p className="font-sans text-charcoal/40 text-sm mb-8 italic">
+                            ...et bien plus encore, tout est possible !
+                        </p>
+                        <a
+                            href="/contact"
+                            className="inline-flex items-center gap-3 px-10 py-5 bg-terracotta text-white rounded-full font-medium uppercase tracking-widest text-sm hover:bg-terracotta/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+                        >
+                            <span>✉</span>
+                            Discutons de votre projet
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             {/* Témoignages */}
             <section className="py-20 md:py-28 px-4 bg-gradient-to-b from-cream via-dusty-pink/10 to-cream overflow-hidden">
                 <div className="max-w-6xl mx-auto">
