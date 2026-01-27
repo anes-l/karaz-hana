@@ -105,7 +105,7 @@ export const Ateliers: React.FC = () => {
                             Moments capturés
                         </h2>
                         <p className="font-sans text-charcoal/50 max-w-lg mx-auto text-sm md:text-base">
-                            Quelques souvenirs de nos ateliers passés, entre nature, créativité et bienveillance.
+                            Quelques souvenirs de mes ateliers passés, entre nature, créativité et bienveillance.
                         </p>
                     </div>
 
@@ -195,7 +195,7 @@ export const Ateliers: React.FC = () => {
                             "
                         </span>
                         <h2 className="font-serif text-3xl md:text-5xl text-charcoal -mt-8 mb-4">
-                            Leurs mots, notre inspiration
+                            Leurs mots, ma source d'inspiration
                         </h2>
                         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-terracotta/40 to-transparent mx-auto" />
                     </div>
@@ -276,7 +276,7 @@ export const Ateliers: React.FC = () => {
                         Envie de participer ?
                     </h2>
                     <p className="font-sans text-charcoal/70 mb-8">
-                        Rejoignez-nous pour un moment de créativité et de partage.
+                        Rejoignez-moi pour un moment de créativité et de partage.
                     </p>
                     <a
                         href="/contact"
