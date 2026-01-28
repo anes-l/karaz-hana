@@ -114,8 +114,6 @@ export const Ateliers: React.FC = () => {
                                         alt="Exemple de Vision Board illustré"
                                         className="rounded-lg shadow-[4px_4px_25px_rgba(0,0,0,0.15)] w-full object-cover aspect-[4/5] bg-cream border-4 border-white"
                                     />
-
-
                                 </div>
 
                                 {/* Élément décoratif arrière-plan */}
@@ -280,47 +278,58 @@ export const Ateliers: React.FC = () => {
                         </p>
                     </div>
 
-                    {/* Grille de photos style polaroid/artiste */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-10">
-                        {[
-                            { src: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=400&fit=crop', rotation: -3, caption: 'Aquarelle' },
-                            { src: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&h=400&fit=crop', rotation: 2, caption: 'Paysage' },
-                            { src: 'https://images.unsplash.com/photo-1513519245088-0e12902e35a6?w=400&h=400&fit=crop', rotation: -1.5, caption: 'Nature' },
-                            { src: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=400&h=400&fit=crop', rotation: 2.5, caption: 'Créativité' },
-                            { src: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=400&fit=crop', rotation: -2, caption: 'Expression' },
-                            { src: 'https://images.unsplash.com/photo-1456086272160-b28b0645b729?w=400&h=400&fit=crop', rotation: 1, caption: 'Partage' }
-                        ].map((photo, i) => (
-                            <div
-                                key={i}
-                                className="group cursor-pointer"
-                                style={{ transform: `rotate(${photo.rotation}deg)` }}
-                            >
-                                {/* Cadre polaroid */}
-                                <div className="bg-white p-3 pb-12 shadow-[5px_5px_15px_rgba(0,0,0,0.1)] hover:shadow-[8px_8px_25px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-2">
-                                    <div className="aspect-square overflow-hidden">
-                                        <img
-                                            src={photo.src}
-                                            alt={`Atelier ${i + 1}`}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                    </div>
-                                    {/* Légende manuscrite */}
-                                    <p className="absolute bottom-3 left-0 right-0 text-center text-charcoal/40 text-xs tracking-widest uppercase font-medium">
-                                        {photo.caption}
-                                    </p>
-                                </div>
-                                {/* Petit pin/épingle décoratif */}
-                                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-terracotta/70 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {/* Styles pour l'animation marquee */}
+                    <style>{`
+                        @keyframes marquee {
+                            0% { transform: translateX(0); }
+                            100% { transform: translateX(-50%); }
+                        }
+                        @keyframes marquee-reverse {
+                            0% { transform: translateX(-50%); }
+                            100% { transform: translateX(0); }
+                        }
+                        .animate-marquee {
+                            animation: marquee 40s linear infinite;
+                        }
+                        .animate-marquee-reverse {
+                            animation: marquee-reverse 40s linear infinite;
+                        }
+                        .marquee-content:hover {
+                            animation-play-state: paused;
+                        }
+                    `}</style>
+                    <div className="relative w-[99vw] left-[50%] right-[50%] -ml-[49.5vw] -mr-[49.5vw] overflow-hidden">
+                        {/* First Row: Nature & Workshops */}
+                        <div className="flex mb-8 overflow-hidden group">
+                            <div className="flex animate-marquee marquee-content">
+                                {/* Photos (Repeated twice for seamless loop) */}
+                                {[...Array(2)].map((_, i) => (
+                                    <React.Fragment key={i}>
+                                        <img src="https://picsum.photos/seed/art1/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/art2/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/art3/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/art4/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/art5/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                    </React.Fragment>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        </div>
 
-                    {/* Élément décoratif */}
-                    <div className="flex justify-center mt-16">
-                        <svg width="100" height="30" viewBox="0 0 100 30" className="text-terracotta/20">
-                            <path d="M0,15 Q25,0 50,15 Q75,30 100,15" fill="none" stroke="currentColor" strokeWidth="1" />
-                            <circle cx="50" cy="15" r="3" fill="currentColor" />
-                        </svg>
+                        {/* Second Row: Detailed & Artistic (Reverse Direction) */}
+                        <div className="flex overflow-hidden group">
+                            <div className="flex animate-marquee-reverse marquee-content">
+                                {/* Photos (Repeated twice for seamless loop) */}
+                                {[...Array(2)].map((_, i) => (
+                                    <React.Fragment key={i}>
+                                        <img src="https://picsum.photos/seed/paint1/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/paint2/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/paint3/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/paint4/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="https://picsum.photos/seed/paint5/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
