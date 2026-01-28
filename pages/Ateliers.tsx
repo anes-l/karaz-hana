@@ -7,6 +7,9 @@ export const Ateliers: React.FC = () => {
     // Slider State
     const [currentSlide, setCurrentSlide] = React.useState(0);
     const [touchStart, setTouchStart] = React.useState(0);
+
+    // Lightbox State
+    const [lightboxImage, setLightboxImage] = React.useState<string | null>(null);
     const [touchEnd, setTouchEnd] = React.useState(0);
 
     const slides = [
@@ -257,27 +260,91 @@ export const Ateliers: React.FC = () => {
             </section>
 
             {/* Anciens Ateliers - Photos */}
-            <section className="py-20 md:py-28 px-4 bg-gradient-to-b from-dusty-pink/5 via-cream to-cream overflow-hidden">
-                <div className="max-w-6xl mx-auto">
-                    {/* Titre décoratif */}
-                    <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-4 mb-4">
-                            <svg width="40" height="20" viewBox="0 0 40 20" className="text-terracotta/30">
-                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                            <span className="text-terracotta/50 text-sm uppercase tracking-[0.3em] font-medium">Galerie</span>
-                            <svg width="40" height="20" viewBox="0 0 40 20" className="text-terracotta/30 rotate-180">
-                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
+            <section className="py-20 md:py-28 px-4 bg-gradient-to-b from-dusty-pink/5 via-cream to-cream overflow-hidden relative">
+                {/* Éléments décoratifs d'arrière-plan */}
+                <div className="absolute top-20 left-10 opacity-[0.07] pointer-events-none">
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-terracotta" />
+                        <circle cx="60" cy="60" r="35" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-sage" />
+                    </svg>
+                </div>
+                <div className="absolute bottom-40 right-10 opacity-[0.07] pointer-events-none">
+                    <svg width="80" height="80" viewBox="0 0 80 80">
+                        <path d="M10,40 Q40,10 70,40 Q40,70 10,40" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-dusty-pink" />
+                    </svg>
+                </div>
+
+                <div className="max-w-4xl mx-auto">
+                    {/* Titre avec style artisanal */}
+                    <div className="text-center mb-12">
+                        {/* Petit label décoratif */}
+                        <div className="inline-flex items-center gap-3 mb-6">
+                            <span className="w-8 h-px bg-terracotta/30"></span>
+                            <span className="text-terracotta/60 text-xs uppercase tracking-[0.25em] font-medium">Galerie</span>
+                            <span className="w-8 h-px bg-terracotta/30"></span>
                         </div>
-                        <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-4">
+
+                        <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-3 relative inline-block">
                             Moments capturés
+                            {/* Soulignement aquarelle */}
+                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-terracotta/20" viewBox="0 0 200 12" preserveAspectRatio="none">
+                                <path d="M0,8 Q50,2 100,8 Q150,14 200,6" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                            </svg>
                         </h2>
-                        <p className="font-sans text-charcoal/50 max-w-lg mx-auto text-sm md:text-base">
-                            Quelques souvenirs de mes ateliers passés, entre nature, créativité et bienveillance.
-                        </p>
                     </div>
 
+                    {/* Texte d'introduction avec style carte postale */}
+                    <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-8 md:p-10 mb-10 shadow-sm border border-charcoal/5">
+                        {/* Coin décoratif */}
+                        <div className="absolute top-4 right-4 opacity-20">
+                            <svg width="24" height="24" viewBox="0 0 24 24" className="text-terracotta">
+                                <path d="M12,2 L14,8 L20,8 L15,12 L17,18 L12,14 L7,18 L9,12 L4,8 L10,8 Z" fill="currentColor" />
+                            </svg>
+                        </div>
+
+                        <div className="space-y-4 text-charcoal/70 text-base md:text-lg leading-relaxed">
+                            <p>
+                                Les ateliers d'aquarelle que je propose sont généralement <strong className="text-charcoal font-medium">à thème</strong>.
+                            </p>
+                            <p>
+                                Je prépare des séances légères et accessibles, où vous découvrez de nouvelles techniques tout en explorant des sujets inspirants.
+                            </p>
+                            <p>
+                                En plein air ou dans un café littéraire, ce sont des moments de <strong className="text-charcoal font-medium">plaisir, de détente et de créativité</strong>, que je partage avec des participants de tous niveaux.
+                            </p>
+                            <p>
+                                Pour l'instant, les ateliers ont lieu à <strong className="text-charcoal font-medium">Tlemcen</strong>, mais j'aimerais beaucoup en proposer dans d'autres villes.
+                            </p>
+                            <p className="pt-3 text-charcoal/80 italic">
+                                Vous êtes un café, un lieu culturel ou un espace créatif et vous aimeriez accueillir un atelier ?
+                            </p>
+                        </div>
+
+                        {/* Bouton CTA */}
+                        <div className="mt-8 text-center">
+                            <a
+                                href="/contact"
+                                className="inline-flex items-center gap-2 px-7 py-3.5 bg-terracotta text-white rounded-full font-medium hover:bg-terracotta/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                            >
+                                Discutons de votre projet
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Séparateur artistique */}
+                    <div className="flex items-center justify-center gap-4 mb-12">
+                        <div className="w-16 h-px bg-gradient-to-r from-transparent to-terracotta/30"></div>
+                        <svg width="20" height="20" viewBox="0 0 20 20" className="text-terracotta/40">
+                            <circle cx="10" cy="10" r="3" fill="currentColor" />
+                        </svg>
+                        <div className="w-16 h-px bg-gradient-to-l from-transparent to-terracotta/30"></div>
+                    </div>
+                </div>
+
+                <div className="max-w-6xl mx-auto">
                     {/* Styles pour l'animation marquee */}
                     <style>{`
                         @keyframes marquee {
@@ -294,43 +361,128 @@ export const Ateliers: React.FC = () => {
                         .animate-marquee-reverse {
                             animation: marquee-reverse 40s linear infinite;
                         }
-                        .marquee-content:hover {
-                            animation-play-state: paused;
+                        .marquee-paused {
+                            animation-play-state: paused !important;
                         }
                     `}</style>
                     <div className="relative w-[99vw] left-[50%] right-[50%] -ml-[49.5vw] -mr-[49.5vw] overflow-hidden">
-                        {/* First Row: Nature & Workshops */}
-                        <div className="flex mb-8 overflow-hidden group">
-                            <div className="flex animate-marquee marquee-content">
-                                {/* Photos (Repeated twice for seamless loop) */}
+                        {/* Row 1: Octobre Rose */}
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40">
+                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                            <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Octobre Rose</h3>
+                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40 rotate-180">
+                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                        </div>
+                        <div className="flex mb-6 overflow-hidden">
+                            <div className={`flex animate-marquee ${lightboxImage ? 'marquee-paused' : ''}`}>
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
-                                        <img src="https://picsum.photos/seed/art1/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/art2/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/art3/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/art4/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/art5/400/500" alt="Atelier moment" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="/octobre rose/1769554013942.jpg" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554013942.jpg')} />
+                                        <img src="/octobre rose/1769554013984.jpg" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554013984.jpg')} />
+                                        <img src="/octobre rose/1769554014020.jpg" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554014020.jpg')} />
+                                        <img src="/octobre rose/1769554014050.jpg" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554014050.jpg')} />
+                                        <img src="/octobre rose/1769554014080.jpg" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554014080.jpg')} />
+                                        <img src="/octobre rose/WhatsApp Image 2025-10-16 at 20.18.47.jpeg" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/WhatsApp Image 2025-10-16 at 20.18.47.jpeg')} />
                                     </React.Fragment>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Second Row: Detailed & Artistic (Reverse Direction) */}
-                        <div className="flex overflow-hidden group">
-                            <div className="flex animate-marquee-reverse marquee-content">
-                                {/* Photos (Repeated twice for seamless loop) */}
+                        {/* Séparateur aquarelle */}
+                        <div className="flex items-center justify-center my-10">
+                            <svg width="200" height="20" viewBox="0 0 200 20" className="text-terracotta/15">
+                                <path d="M0,10 Q25,2 50,10 Q75,18 100,10 Q125,2 150,10 Q175,18 200,10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </div>
+
+                        {/* Row 2: Valentine (Reverse) */}
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40">
+                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                            <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Valentine</h3>
+                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40 rotate-180">
+                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                        </div>
+                        <div className="flex mb-6 overflow-hidden">
+                            <div className={`flex animate-marquee-reverse ${lightboxImage ? 'marquee-paused' : ''}`}>
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
-                                        <img src="https://picsum.photos/seed/paint1/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/paint2/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/paint3/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/paint4/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
-                                        <img src="https://picsum.photos/seed/paint5/400/500" alt="Atelier détail" className="h-64 md:h-80 w-auto object-cover mx-2 rounded-sm" />
+                                        <img src="/valentine/valentine.jpg" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine.jpg')} />
+                                        <img src="/valentine/valentine(1).jpg" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine(1).jpg')} />
+                                        <img src="/valentine/valentine(2).jpg" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine(2).jpg')} />
+                                        <img src="/valentine/valentine(3).jpg" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine(3).jpg')} />
+                                        <img src="/valentine/1769441541619.jpg" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541619.jpg')} />
+                                        <img src="/valentine/1769441541793.JPG" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541793.JPG')} />
+                                        <img src="/valentine/1769441541812.JPG" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541812.JPG')} />
+                                        <img src="/valentine/1769441541833.JPG" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541833.JPG')} />
+                                        <img src="/valentine/1769441541851.JPG" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541851.JPG')} />
+                                        <img src="/valentine/1769441541890.JPG" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541890.JPG')} />
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Séparateur aquarelle */}
+                        <div className="flex items-center justify-center my-10">
+                            <svg width="200" height="20" viewBox="0 0 200 20" className="text-sage/20">
+                                <path d="M0,10 Q25,2 50,10 Q75,18 100,10 Q125,2 150,10 Q175,18 200,10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </div>
+
+                        {/* Row 3: Plein Air */}
+                        <div className="flex items-center justify-center gap-4 mb-6">
+                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-sage/40">
+                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                            <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Plein Air</h3>
+                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-sage/40 rotate-180">
+                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                        </div>
+                        <div className="flex overflow-hidden">
+                            <div className={`flex animate-marquee ${lightboxImage ? 'marquee-paused' : ''}`}>
+                                {[...Array(2)].map((_, i) => (
+                                    <React.Fragment key={i}>
+                                        <img src="/plein air/DSC05954.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05954.JPG')} />
+                                        <img src="/plein air/DSC05976.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05976.JPG')} />
+                                        <img src="/plein air/DSC05977.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05977.JPG')} />
+                                        <img src="/plein air/DSC05982.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05982.JPG')} />
+                                        <img src="/plein air/DSC06030.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06030.JPG')} />
+                                        <img src="/plein air/DSC06041.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06041.JPG')} />
+                                        <img src="/plein air/DSC06116.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06116.JPG')} />
+                                        <img src="/plein air/DSC06219.JPG" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06219.JPG')} />
                                     </React.Fragment>
                                 ))}
                             </div>
                         </div>
                     </div>
+
+                    {/* Lightbox Modal */}
+                    {lightboxImage && (
+                        <div
+                            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-pointer"
+                            onClick={() => setLightboxImage(null)}
+                        >
+                            <button
+                                className="absolute top-6 right-6 text-white text-4xl hover:text-white/70 transition-colors z-10"
+                                onClick={() => setLightboxImage(null)}
+                                aria-label="Fermer"
+                            >
+                                ✕
+                            </button>
+                            <img
+                                src={lightboxImage}
+                                alt="Image agrandie"
+                                className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    )}
                 </div>
             </section>
 
