@@ -1,8 +1,63 @@
 import React from 'react';
-import { Calendar, MapPin, Clock, Banknote, Users, Hourglass, Ticket, Star, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calendar, MapPin, Clock, Banknote, Users, Hourglass, Ticket, Star, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const Ateliers: React.FC = () => {
     const [isExpanded, setIsExpanded] = React.useState(false);
+
+    // Slider State
+    const [currentSlide, setCurrentSlide] = React.useState(0);
+    const [touchStart, setTouchStart] = React.useState(0);
+    const [touchEnd, setTouchEnd] = React.useState(0);
+
+    const slides = [
+        {
+            type: 'video',
+            src: '/0424.mp4',
+            poster: '/hana.jpg',
+            title: 'Atelier en plein air',
+            subtitle: 'Créer au milieu de la nature, là où tout commence.'
+        },
+        {
+            type: 'video',
+            src: '/plage.mp4',
+            poster: '/hana.jpg',
+            title: 'Atelier à la plage',
+            subtitle: "L'inspiration au rythme des vagues."
+        }
+    ];
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe) {
+            nextSlide();
+        }
+        if (isRightSwipe) {
+            prevSlide();
+        }
+
+        setTouchStart(0);
+        setTouchEnd(0);
+    };
 
     const testimonials = [
         {
@@ -67,6 +122,13 @@ export const Ateliers: React.FC = () => {
                                 <div className="absolute top-8 -left-6 w-full h-full border-2 border-white/20 rounded-lg -z-0 rotate-3 max-w-md" />
                             </div>
 
+                            {/* Titre Mobile (visible uniquement sur mobile) - Placé entre l'image et le texte */}
+                            <div className="block md:hidden mt-8 text-center">
+                                <h1 className="font-serif text-4xl text-white mb-2 leading-tight drop-shadow">
+                                    Vision Board <span className="text-cream">illustré</span> à l'aquarelle
+                                </h1>
+                            </div>
+
                             {/* Texte descriptif déplacé ici */}
                             <div className="mt-4">
                                 <p className="font-sans text-white/90 text-lg md:text-xl mb-4 leading-relaxed italic border-l-4 border-white/40 pl-4">
@@ -124,7 +186,7 @@ export const Ateliers: React.FC = () => {
 
                         {/* Colonne Contenu (Droite) - Titre + Infos Pratiques */}
                         <div className="flex flex-col justify-start items-start md:items-start sticky top-24">
-                            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-10 leading-tight drop-shadow">
+                            <h1 className="hidden md:block font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-10 leading-tight drop-shadow">
                                 Vision Board <span className="text-cream">illustré</span> à l'aquarelle
                             </h1>
 
@@ -263,35 +325,76 @@ export const Ateliers: React.FC = () => {
                 </div>
             </section>
 
-            {/* Section Vidéo */}
-            <section className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden">
-                {/* Placeholder vidéo - remplacer par la vraie vidéo */}
-                <div className="absolute inset-0 bg-sage/30">
-                    <video
-                        className="w-full h-full object-cover"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        poster="/hana.jpg"
+            {/* Section Vidéo Slider */}
+            <section
+                className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden group"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+            >
+                {slides.map((slide, index) => (
+                    <div
+                        key={index}
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                            }`}
                     >
-                        {/* Ajouter la source vidéo ici */}
-                        <source src="/0424.mp4" type="video/mp4" />
-                    </video>
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-charcoal/40" />
-                </div>
+                        <div className="absolute inset-0 bg-sage/30">
+                            <video
+                                className="w-full h-full object-cover"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                poster={slide.poster}
+                            >
+                                <source src={slide.src} type="video/mp4" />
+                            </video>
+                            {/* Overlay */}
+                            <div className="absolute inset-0 bg-charcoal/40" />
+                        </div>
 
-                {/* Titre par-dessus */}
-                <div className="absolute inset-0 flex items-center justify-center text-center px-4">
-                    <div>
-                        <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 drop-shadow-lg">
-                            Atelier en plein air
-                        </h2>
-                        <p className="font-sans text-white/90 text-lg md:text-xl max-w-xl mx-auto">
-                            Créer au milieu de la nature, là où tout commence.
-                        </p>
+                        {/* Contenu Texte */}
+                        <div className="absolute inset-0 flex items-center justify-center text-center px-12 md:px-20">
+                            <div className="transform transition-all duration-700 translate-y-0 opacity-100">
+                                <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 drop-shadow-lg">
+                                    {slide.title}
+                                </h2>
+                                <p className="font-sans text-white/90 text-lg md:text-xl max-w-xl mx-auto drop-shadow-md">
+                                    {slide.subtitle}
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                ))}
+
+                {/* Navigation Arrows (Desktop) */}
+                <button
+                    onClick={prevSlide}
+                    className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 items-center justify-center text-white hover:scale-110 transition-transform drop-shadow-lg"
+                    aria-label="Previous slide"
+                >
+                    <ChevronLeft size={48} />
+                </button>
+
+                <button
+                    onClick={nextSlide}
+                    className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 items-center justify-center text-white hover:scale-110 transition-transform drop-shadow-lg"
+                    aria-label="Next slide"
+                >
+                    <ChevronRight size={48} />
+                </button>
+
+                {/* Indicateurs (Dots) */}
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+                    {slides.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white scale-110' : 'bg-white/40 hover:bg-white/60'
+                                }`}
+                            aria-label={`Go to slide ${index + 1}`}
+                        />
+                    ))}
                 </div>
             </section>
 
