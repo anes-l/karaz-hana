@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MapPin, Clock, Banknote } from 'lucide-react';
+import { Calendar, MapPin, Clock, Banknote, Users, Hourglass, Star, Ticket } from 'lucide-react';
 
 export const Ateliers: React.FC = () => {
     const testimonials = [
@@ -35,55 +35,126 @@ export const Ateliers: React.FC = () => {
 
     return (
         <div className="w-full">
-
-            {/* Bandeau Prochain Atelier */}
-            <section className="bg-terracotta text-white py-12 md:py-16 px-4">
-                <div className="max-w-4xl mx-auto">
-                    <span className="inline-block bg-white/20 text-white text-xs uppercase tracking-widest px-4 py-2 rounded-full mb-6">
-                        Prochain Atelier
-                    </span>
-
-                    <h1 className="font-serif text-3xl md:text-5xl mb-6 leading-tight">
-                        Un atelier pour soi, pour créer ce que l'on veut voir grandir dans sa vie.
-                    </h1>
-
-                    <p className="font-sans text-white/90 text-lg md:text-xl mb-8 leading-relaxed">
-                        Offrez-vous une pause créative pour commencer l'année avec intention, douceur et couleurs.
-                    </p>
-
-                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 mb-8">
-                        <p className="text-white/95 leading-relaxed mb-6">
-                            À travers la réalisation d'un <strong>vision board illustré à l'aquarelle</strong>, je vous guide pour découvrir les bases de l'illustration, la mise en page et le matériel, dans une ambiance chaleureuse et accessible à tous les niveaux.
-                        </p>
-                        <p className="text-white/95 leading-relaxed mb-6">
-                            Au-delà de la création, ce moment sera aussi un <strong>espace de réflexion et de discussion</strong> autour de cette tendance que l'on voit émerger, de son sens et de la manière dont elle peut s'inscrire dans nos valeurs et notre vie.
-                        </p>
-                        <p className="text-white/90 italic leading-relaxed">
-                            ✨ Vous repartez avec votre création personnelle, de nouvelles bases artistiques, et surtout un moment pour vous recentrer et poser vos intentions avec sens.
-                        </p>
+            {/* Section Vision Board - Prochain Atelier */}
+            <section className="bg-terracotta py-16 md:py-24 px-4">
+                <div className="max-w-5xl mx-auto">
+                    <div className="mb-12 text-center">
+                        <span className="inline-block bg-white/30 text-white text-xs uppercase tracking-widest px-6 py-2 rounded-full mb-4 font-medium shadow-md">
+                            Prochain Atelier
+                        </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-4 md:gap-6 text-sm md:text-base">
-                        <div className="flex items-center gap-2">
-                            <MapPin size={18} />
-                            <span>Café littéraire La Habana</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
+                        {/* Colonne Image + Texte (Gauche) */}
+                        <div className="flex flex-col gap-10">
+                            <div className="relative flex justify-center">
+                                <div className="relative z-10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500 w-full max-w-md mx-auto">
+                                    {/* Effet 'Scotch' en haut */}
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-40 h-10 bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm rotate-1 z-20" />
+
+                                    <img
+                                        src="/vision-board-workshop.png"
+                                        alt="Exemple de Vision Board illustré"
+                                        className="rounded-lg shadow-[4px_4px_25px_rgba(0,0,0,0.15)] w-full object-cover aspect-[4/5] bg-cream border-4 border-white"
+                                    />
+
+
+                                </div>
+
+                                {/* Élément décoratif arrière-plan */}
+                                <div className="absolute top-8 -left-6 w-full h-full border-2 border-white/20 rounded-lg -z-0 rotate-3 max-w-md" />
+                            </div>
+
+                            {/* Texte descriptif déplacé ici */}
+                            <div className="mt-4">
+                                <p className="font-sans text-white/90 text-lg md:text-xl mb-8 leading-relaxed italic border-l-4 border-white/40 pl-4">
+                                    "Un atelier pour soi, pour créer ce que l'on veut voir grandir dans sa vie."
+                                </p>
+
+                                <div className="space-y-6 text-white/90 font-sans leading-relaxed">
+                                    <p>
+                                        À travers la réalisation d'un <strong>vision board illustré à l'aquarelle</strong>, je vous guide pour découvrir les bases de l'illustration, accessibles à tous les niveaux, dans une ambiance simple et chaleureuse.
+                                    </p>
+                                    <p>
+                                        Ici, la technique de l'aquarelle se mêle à la réflexion personnelle.
+                                    </p>
+                                    <p>
+                                        Un espace où l'on apprend, on échange et on explore ensemble, en toute authenticité.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Banknote size={18} />
-                            <span>1200 DA</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Clock size={18} />
-                            <span>Paiement sur place</span>
+
+                        {/* Colonne Contenu (Droite) - Titre + Infos Pratiques */}
+                        <div className="flex flex-col justify-start items-start md:items-start sticky top-24">
+                            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-10 leading-tight drop-shadow">
+                                Vision Board <span className="text-cream">illustré</span> à l'aquarelle
+                            </h1>
+
+                            {/* Informations Pratiques */}
+                            <div className="w-full bg-white/90 rounded-2xl p-8 border border-white/40 relative overflow-hidden shadow-xl">
+                                <div className="absolute top-0 right-0 w-20 h-20 bg-terracotta/10 rounded-bl-full" />
+
+                                <h3 className="font-serif text-2xl text-terracotta mb-6 flex items-center gap-3">
+                                    <span className="w-8 h-[1px] bg-terracotta"></span>
+                                    Informations pratiques
+                                </h3>
+
+                                <ul className="space-y-4">
+                                    <li className="flex items-start gap-3">
+                                        <MapPin className="text-terracotta shrink-0 mt-1" size={20} />
+                                        <div>
+                                            <span className="font-medium text-charcoal block">Lieu</span>
+                                            <span className="text-charcoal/70 text-sm">Café littéraire La Habana, Bouhanak les 400, Palais des poètes, Tlemcen, 13000</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <Calendar className="text-terracotta shrink-0 mt-1" size={20} />
+                                        <div>
+                                            <span className="font-medium text-charcoal block">Date</span>
+                                            <span className="text-charcoal/70 text-sm">7 février 2026</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <Clock className="text-terracotta shrink-0" size={20} />
+                                        <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Horaire :</strong> 9h30</span>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <Hourglass className="text-terracotta shrink-0" size={20} />
+                                        <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Durée :</strong> 3 heures</span>
+                                    </li>
+                                    <li className="flex items-center gap-3">
+                                        <Banknote className="text-terracotta shrink-0" size={20} />
+                                        <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Tarif :</strong> 1 200 DA – paiement sur place</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <Users className="text-terracotta shrink-0 mt-1" size={20} />
+                                        <div>
+                                            <span className="font-medium text-charcoal block">Public</span>
+                                            <span className="text-charcoal/70 text-sm">Adultes et adolescents à partir de 16 ans</span>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <Star className="text-terracotta shrink-0 mt-1" size={20} />
+                                        <div>
+                                            <span className="font-medium text-charcoal block">Niveau</span>
+                                            <span className="text-charcoal/70 text-sm">Accessible à tous, débutants bienvenus</span>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <div className="mt-8 pt-6 border-t border-terracotta/10">
+                                    <a
+                                        href="/contact"
+                                        className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-terracotta text-white px-8 py-4 rounded-full font-medium uppercase tracking-widest text-sm hover:bg-terracotta/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group"
+                                    >
+                                        <Ticket className="group-hover:animate-pulse" size={20} />
+                                        Réserver ma place
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <a
-                        href="/contact"
-                        className="inline-block mt-8 bg-white text-terracotta px-8 py-4 rounded-full font-medium uppercase tracking-widest text-sm hover:bg-cream transition-colors shadow-lg"
-                    >
-                        S'inscrire
-                    </a>
                 </div>
             </section>
 
