@@ -260,71 +260,50 @@ export const Ateliers: React.FC = () => {
             </section>
 
             {/* Anciens Ateliers - Photos */}
-            <section className="py-20 md:py-28 px-4 bg-gradient-to-b from-dusty-pink/5 via-cream to-cream overflow-hidden relative">
-                {/* Éléments décoratifs d'arrière-plan */}
-                <div className="absolute top-20 left-10 opacity-[0.07] pointer-events-none">
-                    <svg width="120" height="120" viewBox="0 0 120 120">
-                        <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-terracotta" />
-                        <circle cx="60" cy="60" r="35" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-sage" />
-                    </svg>
-                </div>
-                <div className="absolute bottom-40 right-10 opacity-[0.07] pointer-events-none">
-                    <svg width="80" height="80" viewBox="0 0 80 80">
-                        <path d="M10,40 Q40,10 70,40 Q40,70 10,40" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-dusty-pink" />
-                    </svg>
-                </div>
-
-                <div className="max-w-4xl mx-auto">
-                    {/* Titre avec style artisanal */}
-                    <div className="text-center mb-12">
-                        {/* Petit label décoratif */}
-                        <div className="inline-flex items-center gap-3 mb-6">
-                            <span className="w-8 h-px bg-terracotta/30"></span>
-                            <span className="text-terracotta/60 text-xs uppercase tracking-[0.25em] font-medium">Galerie</span>
-                            <span className="w-8 h-px bg-terracotta/30"></span>
+            <section className="py-20 md:py-28 px-4 bg-gradient-to-b from-dusty-pink/5 via-cream to-cream overflow-hidden">
+                <div className="max-w-6xl mx-auto">
+                    {/* Titre décoratif */}
+                    <div className="text-center mb-16">
+                        <div className="inline-flex items-center gap-4 mb-4">
+                            <svg width="40" height="20" viewBox="0 0 40 20" className="text-terracotta/30">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                            <span className="text-terracotta/50 text-sm uppercase tracking-[0.3em] font-medium">Galerie</span>
+                            <svg width="40" height="20" viewBox="0 0 40 20" className="text-terracotta/30 rotate-180">
+                                <path d="M0,10 Q10,0 20,10 Q30,20 40,10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
                         </div>
 
-                        <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-3 relative inline-block">
+                        <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-6">
                             Moments capturés
-                            {/* Soulignement aquarelle */}
-                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-terracotta/20" viewBox="0 0 200 12" preserveAspectRatio="none">
-                                <path d="M0,8 Q50,2 100,8 Q150,14 200,6" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                            </svg>
                         </h2>
                     </div>
 
-                    {/* Texte d'introduction avec style carte postale */}
-                    <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-8 md:p-10 mb-10 shadow-sm border border-charcoal/5">
-                        {/* Coin décoratif */}
-                        <div className="absolute top-4 right-4 opacity-20">
-                            <svg width="24" height="24" viewBox="0 0 24 24" className="text-terracotta">
-                                <path d="M12,2 L14,8 L20,8 L15,12 L17,18 L12,14 L7,18 L9,12 L4,8 L10,8 Z" fill="currentColor" />
-                            </svg>
-                        </div>
+                    {/* Texte d'introduction */}
+                    <div className="max-w-2xl mx-auto text-left md:text-center space-y-4 text-charcoal/70 text-base md:text-lg leading-relaxed mb-8">
 
-                        <div className="space-y-4 text-charcoal/70 text-base md:text-lg leading-relaxed">
-                            <p>
-                                Les ateliers d'aquarelle que je propose sont généralement <strong className="text-charcoal font-medium">à thème</strong>.
-                            </p>
-                            <p>
-                                Je prépare des séances légères et accessibles, où vous découvrez de nouvelles techniques tout en explorant des sujets inspirants.
-                            </p>
-                            <p>
-                                En plein air ou dans un café littéraire, ce sont des moments de <strong className="text-charcoal font-medium">plaisir, de détente et de créativité</strong>, que je partage avec des participants de tous niveaux.
-                            </p>
-                            <p>
-                                Pour l'instant, les ateliers ont lieu à <strong className="text-charcoal font-medium">Tlemcen</strong>, mais j'aimerais beaucoup en proposer dans d'autres villes.
-                            </p>
-                            <p className="pt-3 text-charcoal/80 italic">
-                                Vous êtes un café, un lieu culturel ou un espace créatif et vous aimeriez accueillir un atelier ?
-                            </p>
-                        </div>
+
+                        <p>
+                            Les ateliers d'aquarelle que je propose sont généralement <strong className="text-charcoal">à thème</strong>.
+                        </p>
+                        <p>
+                            Je prépare des séances légères et accessibles, où vous découvrez de nouvelles techniques tout en explorant des sujets inspirants.
+                        </p>
+                        <p>
+                            En plein air ou dans un café littéraire, ce sont des moments de <strong className="text-charcoal">plaisir, de détente et de créativité</strong>, que je partage avec des participants de tous niveaux.
+                        </p>
+                        <p>
+                            Pour l'instant, les ateliers ont lieu à <strong className="text-charcoal">Tlemcen</strong>, mais j'aimerais beaucoup en proposer dans d'autres villes.
+                        </p>
+                        <p className="pt-2">
+                            Vous êtes un café, un lieu culturel ou un espace créatif et vous aimeriez accueillir un atelier ?
+                        </p>
 
                         {/* Bouton CTA */}
                         <div className="mt-8 text-center">
                             <a
                                 href="/contact"
-                                className="inline-flex items-center gap-2 px-7 py-3.5 bg-terracotta text-white rounded-full font-medium hover:bg-terracotta/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-terracotta text-white rounded-full font-medium hover:bg-terracotta/90 transition-colors shadow-md hover:shadow-lg"
                             >
                                 Discutons de votre projet
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -334,14 +313,7 @@ export const Ateliers: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Séparateur artistique */}
-                    <div className="flex items-center justify-center gap-4 mb-12">
-                        <div className="w-16 h-px bg-gradient-to-r from-transparent to-terracotta/30"></div>
-                        <svg width="20" height="20" viewBox="0 0 20 20" className="text-terracotta/40">
-                            <circle cx="10" cy="10" r="3" fill="currentColor" />
-                        </svg>
-                        <div className="w-16 h-px bg-gradient-to-l from-transparent to-terracotta/30"></div>
-                    </div>
+
                 </div>
 
                 <div className="max-w-6xl mx-auto">
