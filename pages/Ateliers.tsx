@@ -1,7 +1,9 @@
 import React from 'react';
-import { Calendar, MapPin, Clock, Banknote, Users, Hourglass, Star, Ticket } from 'lucide-react';
+import { Calendar, MapPin, Clock, Banknote, Users, Hourglass, Ticket, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 export const Ateliers: React.FC = () => {
+    const [isExpanded, setIsExpanded] = React.useState(false);
+
     const testimonials = [
         {
             text: "Franchement, j'ai participé à trois ateliers et c'était vraiment magnifique. Je ne regrette absolument pas. J'adore l'ambiance, ta méthode, les ateliers en plein air et surtout ta gentillesse avec tout le monde.",
@@ -67,7 +69,7 @@ export const Ateliers: React.FC = () => {
 
                             {/* Texte descriptif déplacé ici */}
                             <div className="mt-4">
-                                <p className="font-sans text-white/90 text-lg md:text-xl mb-8 leading-relaxed italic border-l-4 border-white/40 pl-4">
+                                <p className="font-sans text-white/90 text-lg md:text-xl mb-4 leading-relaxed italic border-l-4 border-white/40 pl-4">
                                     "Un atelier pour soi, pour créer ce que l'on veut voir grandir dans sa vie."
                                 </p>
 
@@ -82,6 +84,41 @@ export const Ateliers: React.FC = () => {
                                         Un espace où l'on apprend, on échange et on explore ensemble, en toute authenticité.
                                     </p>
                                 </div>
+
+                                <div className={`space-y-6 text-white/90 font-sans leading-relaxed transition-all duration-500 overflow-hidden ${isExpanded ? 'max-h-[800px] opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
+                                    <p>
+                                        Au-delà de la création, ce moment sera aussi un <strong>espace de réflexion et de discussion</strong> autour de cette tendance que l'on voit émerger, de son sens et de la manière dont elle peut s'inscrire dans nos valeurs et notre religion.
+                                    </p>
+                                    <p>
+                                        Le temps de discussion sera animé par une amie passionnée par l'analyse et l'échange d'idées, afin d'ouvrir le dialogue avec bienveillance et profondeur.
+                                    </p>
+                                    <p>
+                                        Vous repartez avec votre création personnelle, de nouvelles bases artistiques, et surtout un moment pour vous recentrer et poser vos intentions avec sens.
+                                    </p>
+                                    <p className="font-medium text-cream">
+                                        Venez avec <strong>une idée claire des objectifs</strong> que vous souhaitez représenter.
+                                    </p>
+                                    <p className="font-bold text-white">
+                                        Tout le matériel est fourni.
+                                    </p>
+                                </div>
+
+                                <button
+                                    onClick={() => setIsExpanded(!isExpanded)}
+                                    className="mt-4 flex items-center gap-2 text-white font-medium hover:text-white/80 transition-colors border-b border-transparent hover:border-white/50 pb-1"
+                                >
+                                    {isExpanded ? (
+                                        <>
+                                            <ChevronUp size={20} />
+                                            Réduire
+                                        </>
+                                    ) : (
+                                        <>
+                                            <ChevronDown size={20} />
+                                            En savoir plus sur l'atelier
+                                        </>
+                                    )}
+                                </button>
                             </div>
                         </div>
 
@@ -141,6 +178,7 @@ export const Ateliers: React.FC = () => {
                                             <span className="text-charcoal/70 text-sm">Accessible à tous, débutants bienvenus</span>
                                         </div>
                                     </li>
+
                                 </ul>
 
                                 <div className="mt-8 pt-6 border-t border-terracotta/10">
