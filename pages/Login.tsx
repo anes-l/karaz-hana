@@ -36,10 +36,8 @@ export const Login: React.FC = () => {
             await signInWithGoogle();
             navigate('/accueil');
         } catch (err: any) {
-            console.error("Google Login Error:", err);
-            const errorMessage = err.message || 'Échec de la connexion avec Google.';
-            const errorCode = err.code ? ` (${err.code})` : '';
-            setError(`Erreur Google: ${errorMessage}${errorCode}`);
+            console.error(err);
+            setError('Échec de la connexion avec Google. Réessayez plus tard.');
         } finally {
             setLoading(false);
         }
