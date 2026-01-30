@@ -1,23 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Palette, LogOut } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { Palette } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
-    const { logout } = useAuth();
 
     return (
         <div className="min-h-screen bg-cream p-8">
             <div className="max-w-4xl mx-auto">
                 <header className="flex justify-between items-center mb-12">
                     <h1 className="font-serif text-4xl text-charcoal">Tableau de bord</h1>
-                    <button
-                        onClick={() => logout()}
-                        className="flex items-center gap-2 text-terracotta hover:text-terracotta/80 font-medium transition-colors"
-                    >
-                        <LogOut size={20} />
-                        Déconnexion
-                    </button>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

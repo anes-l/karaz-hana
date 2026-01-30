@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Instagram, Facebook, ShoppingBag, Menu, X, LogIn } from 'lucide-react';
+import { Instagram, Facebook, ShoppingBag, Menu, X, LogIn, User, Shield, LogOut } from 'lucide-react';
 import { NAV_ITEMS } from '../types';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Header: React.FC = () => {
-  const { userRole, currentUser } = useAuth();
+  const { userRole, currentUser, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -16,6 +17,16 @@ export const Header: React.FC = () => {
   const handleNavClick = (page: string) => {
     navigate(`/${page}`);
     setMobileMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsDropdownOpen(false);
+      navigate('/login');
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   // Déduit si on est sur une page admin
@@ -42,8 +53,8 @@ export const Header: React.FC = () => {
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <div className={`hidden md:flex gap-4 opacity-70 hover:opacity-100 transition-opacity ${textColor}`}>
-              <a href="https://www.instagram.com/karaz.hana/" className={`transition-colors ${hoverColor}`}><Instagram size={20} /></a>
-              <a href="#" className={`transition-colors ${hoverColor}`}><Facebook size={20} /></a>
+              <a href="https://www.instagram.com/karaz.hana/" className={`transition-colors ${hoverColor}`} target="_blank" rel="noopener noreferrer"><Instagram size={20} /></a>
+              <a href="https://www.facebook.com/profile.php?id=61574172396909" className={`transition-colors ${hoverColor}`} target="_blank" rel="noopener noreferrer"><Facebook size={20} /></a>
             </div>
           </div>
 
@@ -61,14 +72,50 @@ export const Header: React.FC = () => {
           <div className="flex items-center justify-end gap-4">
             {/* Admin Link if role is admin */}
             {userRole === 'admin' && (
-              <Link to="/gestion" className={`hidden md:flex items-center gap-1 transition-colors text-sm font-medium uppercase tracking-wide ${textColor} ${hoverColor}`}>
-                Admin
+              <Link to="/gestion" className={`hidden md:flex items-center gap-1 transition-colors ${textColor} ${hoverColor}`} title="Administration">
+                <Shield size={20} />
               </Link>
             )}
 
             {/* Account / Login Icon */}
             {currentUser ? (
-              <span className={`text-xs opacity-50 mr-2 hidden md:block ${textColor}`}>{currentUser.email?.split('@')[0]}</span>
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={`flex items-center transition-colors ${textColor} ${hoverColor}`}
+                >
+                  <User size={20} />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-[60] border border-gray-100">
+                    <div className="px-4 py-3 border-b border-gray-100 bg-cream/30">
+                      <p className="text-sm font-serif font-bold text-charcoal">{currentUser.displayName || 'Utilisateur'}</p>
+                      <p className="text-xs text-charcoal/60 truncate">{currentUser.email}</p>
+                    </div>
+
+                    <div className="py-1">
+                      {userRole === 'admin' && (
+                        <Link
+                          to="/gestion"
+                          onClick={() => setIsDropdownOpen(false)}
+                          className="flex items-center w-full px-4 py-2 text-sm text-charcoal/80 hover:bg-cream/50 hover:text-terracotta transition-colors"
+                        >
+                          <Shield size={16} className="mr-2" />
+                          Administration
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        <LogOut size={16} className="mr-2" />
+                        Déconnexion
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <Link to="/login" className={`${textColor} ${hoverColor}`}>
                 <LogIn size={20} />
@@ -138,8 +185,8 @@ export const Header: React.FC = () => {
           )}
         </nav>
         <div className="mt-6 flex gap-4 text-charcoal">
-          <Instagram size={20} />
-          <Facebook size={20} />
+          <a href="https://www.instagram.com/karaz.hana/" target="_blank" rel="noopener noreferrer" className="hover:text-terracotta transition-colors"><Instagram size={20} /></a>
+          <a href="https://www.facebook.com/profile.php?id=61574172396909" target="_blank" rel="noopener noreferrer" className="hover:text-terracotta transition-colors"><Facebook size={20} /></a>
         </div>
       </div>
 

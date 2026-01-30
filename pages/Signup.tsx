@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'; // Import updateProfile
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { ChevronRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Signup: React.FC = () => {
+    const [firstName, setFirstName] = useState(''); // New state
+    const [lastName, setLastName] = useState('');   // New state
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -33,9 +35,18 @@ export const Signup: React.FC = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
+            // Update Auth Profile with Display Name
+            const displayName = `${firstName} ${lastName}`.trim();
+            await updateProfile(user, {
+                displayName: displayName
+            });
+
             // Create user document in Firestore
             await setDoc(doc(db, 'users', user.uid), {
                 email: user.email,
+                firstName, // Store separately too
+                lastName,  // Store separately too
+                displayName,
                 role: 'user', // Default role
                 createdAt: new Date().toISOString()
             });
@@ -77,6 +88,28 @@ export const Signup: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-charcoal/70 mb-1">Prénom</label>
+                            <input
+                                type="text"
+                                required
+                                className="w-full px-4 py-3 border border-charcoal/10 rounded-md focus:outline-none focus:ring-1 focus:ring-terracotta bg-cream/20"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-charcoal/70 mb-1">Nom</label>
+                            <input
+                                type="text"
+                                required
+                                className="w-full px-4 py-3 border border-charcoal/10 rounded-md focus:outline-none focus:ring-1 focus:ring-terracotta bg-cream/20"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </div>
+                    </div>
                     <div>
                         <label className="block text-sm font-medium text-charcoal/70 mb-1">Email</label>
                         <input
