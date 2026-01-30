@@ -9,7 +9,7 @@ export const Home: React.FC = () => {
 
         {/* Left: Image Area */}
         <div className="w-full md:w-1/2 h-[50vh] md:h-auto relative overflow-hidden group rounded-[50px]">
-          <div className="absolute inset-0 bg-charcoal/10 z-10 group-hover:bg-transparent transition-colors duration-700"></div>
+
           <img
             src="/hana.jpg"
             alt="Portrait de Karaz Hana"
