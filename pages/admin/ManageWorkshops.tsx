@@ -155,6 +155,19 @@ export const ManageWorkshops: React.FC = () => {
                 await updateDoc(doc(db, 'workshops', currentWorkshop.id), workshopData);
             } else {
                 await addDoc(collection(db, 'workshops'), workshopData);
+
+                // Trigger email notification for new workshops
+                try {
+                    await fetch('/api/notify-users', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ workshop: workshopData })
+                    });
+                    alert("Atelier créé et notification envoyée !");
+                } catch (emailErr) {
+                    console.error("Failed to send notifications:", emailErr);
+                    alert("Atelier créé, mais échec de l'envoi des emails.");
+                }
             }
 
             setIsEditing(false);
