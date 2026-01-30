@@ -1,8 +1,32 @@
 import React from 'react';
 import { Calendar, MapPin, Clock, Banknote, Users, Hourglass, Ticket, Star, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { db } from '../firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { Workshop } from '../types';
 
 export const Ateliers: React.FC = () => {
     const [isExpanded, setIsExpanded] = React.useState(false);
+    const [upcomingWorkshop, setUpcomingWorkshop] = React.useState<Workshop | null>(null);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const fetchUpcomingWorkshop = async () => {
+            try {
+                const q = query(collection(db, 'workshops'), where('isUpcoming', '==', true));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const doc = querySnapshot.docs[0];
+                    setUpcomingWorkshop({ id: doc.id, ...doc.data() } as Workshop);
+                }
+            } catch (error) {
+                console.error("Error fetching workshop:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUpcomingWorkshop();
+    }, []);
 
     // Slider State
     const [currentSlide, setCurrentSlide] = React.useState(0);
@@ -104,158 +128,177 @@ export const Ateliers: React.FC = () => {
                         </span>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
-                        {/* Colonne Image + Texte (Gauche) */}
-                        <div className="flex flex-col gap-10">
-                            <div className="relative flex justify-center">
-                                <div className="relative z-10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500 w-full max-w-md mx-auto">
-                                    {/* Effet 'Scotch' en haut */}
-                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-40 h-10 bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm rotate-1 z-20" />
+                    {loading ? (
+                        <div className="text-white text-center">Chargement des informations...</div>
+                    ) : upcomingWorkshop ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
+                            {/* Colonne Image + Texte (Gauche) */}
+                            <div className="flex flex-col gap-10">
+                                <div className="relative flex justify-center">
+                                    <div className="relative z-10 rotate-[-2deg] hover:rotate-0 transition-transform duration-500 w-full max-w-md mx-auto">
+                                        {/* Effet 'Scotch' en haut */}
+                                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-40 h-10 bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm rotate-1 z-20" />
 
-                                    <img
-                                        src="/vision-board-workshop.png"
-                                        alt="Exemple de Vision Board illustré"
-                                        className="rounded-lg shadow-[4px_4px_25px_rgba(0,0,0,0.15)] w-full object-cover aspect-[4/5] bg-cream border-4 border-white"
-                                    />
+                                        <img
+                                            src={upcomingWorkshop.imageUrl}
+                                            alt={upcomingWorkshop.title}
+                                            className="rounded-lg shadow-[4px_4px_25px_rgba(0,0,0,0.15)] w-full object-cover aspect-[4/5] bg-cream border-4 border-white"
+                                        />
+                                    </div>
+
+                                    {/* Élément décoratif arrière-plan */}
+                                    <div className="absolute top-8 -left-6 w-full h-full border-2 border-white/20 rounded-lg -z-0 rotate-3 max-w-md" />
                                 </div>
 
-                                {/* Élément décoratif arrière-plan */}
-                                <div className="absolute top-8 -left-6 w-full h-full border-2 border-white/20 rounded-lg -z-0 rotate-3 max-w-md" />
-                            </div>
-
-                            {/* Titre Mobile (visible uniquement sur mobile) - Placé entre l'image et le texte */}
-                            <div className="block md:hidden mt-8 text-center">
-                                <h1 className="font-serif text-4xl text-white mb-2 leading-tight drop-shadow">
-                                    Vision Board <span className="text-cream">illustré</span> à l'aquarelle
-                                </h1>
-                            </div>
-
-                            {/* Texte descriptif déplacé ici */}
-                            <div className="mt-4">
-                                <p className="font-sans text-white/90 text-lg md:text-xl mb-4 leading-relaxed italic border-l-4 border-white/40 pl-4">
-                                    "Un atelier pour soi, pour créer ce que l'on veut voir grandir dans sa vie."
-                                </p>
-
-                                <div className="space-y-6 text-white/90 font-sans leading-relaxed">
-                                    <p>
-                                        À travers la réalisation d'un <strong>vision board illustré à l'aquarelle</strong>, je vous guide pour découvrir les bases de l'illustration, accessibles à tous les niveaux, dans une ambiance simple et chaleureuse.
-                                    </p>
-                                    <p>
-                                        Ici, la technique de l'aquarelle se mêle à la réflexion personnelle.
-                                    </p>
-                                    <p>
-                                        Un espace où l'on apprend, on échange et on explore ensemble, en toute authenticité.
-                                    </p>
+                                {/* Titre Mobile (visible uniquement sur mobile) */}
+                                <div className="block md:hidden mt-8 text-center">
+                                    <h1 className="font-serif text-4xl text-white mb-2 leading-tight drop-shadow">
+                                        {upcomingWorkshop.title}
+                                    </h1>
                                 </div>
 
-                                <div className={`space-y-6 text-white/90 font-sans leading-relaxed transition-all duration-500 overflow-hidden ${isExpanded ? 'max-h-[800px] opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
-                                    <p>
-                                        Au-delà de la création, ce moment sera aussi un <strong>espace de réflexion et de discussion</strong> autour de cette tendance que l'on voit émerger, de son sens et de la manière dont elle peut s'inscrire dans nos valeurs et notre religion.
-                                    </p>
-                                    <p>
-                                        Le temps de discussion sera animé par une amie passionnée par l'analyse et l'échange d'idées, afin d'ouvrir le dialogue avec bienveillance et profondeur.
-                                    </p>
-                                    <p>
-                                        Vous repartez avec votre création personnelle, de nouvelles bases artistiques, et surtout un moment pour vous recentrer et poser vos intentions avec sens.
-                                    </p>
-                                    <p className="font-medium text-cream">
-                                        Venez avec <strong>une idée claire des objectifs</strong> que vous souhaitez représenter.
-                                    </p>
-                                    <p className="font-bold text-white">
-                                        Tout le matériel est fourni.
-                                    </p>
-                                </div>
-
-                                <button
-                                    onClick={() => setIsExpanded(!isExpanded)}
-                                    className="mt-4 flex items-center gap-2 text-white font-medium hover:text-white/80 transition-colors border-b border-transparent hover:border-white/50 pb-1"
-                                >
-                                    {isExpanded ? (
-                                        <>
-                                            <ChevronUp size={20} />
-                                            Réduire
-                                        </>
-                                    ) : (
-                                        <>
-                                            <ChevronDown size={20} />
-                                            En savoir plus sur l'atelier
-                                        </>
+                                {/* Texte descriptif */}
+                                <div className="mt-4">
+                                    {/* Citation (si présente) */}
+                                    {upcomingWorkshop.quote && (
+                                        <div className="font-serif text-white/90 text-xl md:text-2xl mb-8 leading-relaxed italic border-l-4 border-white/40 pl-6 py-1">
+                                            "{upcomingWorkshop.quote}"
+                                        </div>
                                     )}
-                                </button>
+
+                                    {/* Description Courte */}
+                                    <div className="font-sans text-white/90 text-lg md:text-xl mb-4 leading-relaxed space-y-4">
+                                        {upcomingWorkshop.description?.split('\n').map((para, idx) => (
+                                            <p key={idx} dangerouslySetInnerHTML={{
+                                                __html: para
+                                                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                            }} />
+                                        ))}
+                                    </div>
+
+                                    {/* Infos Détaillées (Collapsible) */}
+                                    <div className={`space-y-4 text-white/90 font-sans leading-relaxed transition-all duration-500 overflow-hidden ${isExpanded ? 'max-h-[800px] opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
+                                        {upcomingWorkshop.moreInfo?.split('\n').map((para, idx) => (
+                                            <p key={idx} dangerouslySetInnerHTML={{
+                                                __html: para
+                                                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                            }} />
+                                        ))}
+
+                                        {!upcomingWorkshop.moreInfo && (
+                                            <p className="italic opacity-70">Plus de détails bientôt...</p>
+                                        )}
+
+                                        <p className="font-bold text-white pt-2">
+                                            Tout le matériel est fourni.
+                                        </p>
+                                    </div>
+
+                                    {/* Bouton Voir Plus - Masqué si pas de détails supplémentaires */}
+                                    {upcomingWorkshop.moreInfo && (
+                                        <button
+                                            onClick={() => setIsExpanded(!isExpanded)}
+                                            className="mt-6 flex items-center gap-2 text-white font-medium hover:text-white/80 transition-colors border-b border-white/30 hover:border-white/80 pb-1"
+                                        >
+                                            {isExpanded ? (
+                                                <>
+                                                    <ChevronUp size={20} />
+                                                    Réduire
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ChevronDown size={20} />
+                                                    En savoir plus sur l'atelier
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Colonne Contenu (Droite) - Titre + Infos Pratiques */}
-                        <div className="flex flex-col justify-start items-start md:items-start sticky top-24">
-                            <h1 className="hidden md:block font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-10 leading-tight drop-shadow">
-                                Vision Board <span className="text-cream">illustré</span> à l'aquarelle
-                            </h1>
+                            {/* Colonne Contenu (Droite) - Titre + Infos Pratiques */}
+                            <div className="flex flex-col justify-start items-start md:items-start sticky top-24">
+                                <h1 className="hidden md:block font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-10 leading-tight drop-shadow">
+                                    {upcomingWorkshop.title}
+                                </h1>
 
-                            {/* Informations Pratiques */}
-                            <div className="w-full bg-white/90 rounded-2xl p-8 border border-white/40 relative overflow-hidden shadow-xl">
-                                <div className="absolute top-0 right-0 w-20 h-20 bg-terracotta/10 rounded-bl-full" />
+                                {/* Informations Pratiques */}
+                                {/* Informations Pratiques */}
+                                <div className="w-full bg-white/90 rounded-2xl p-8 border border-white/40 relative overflow-hidden shadow-xl">
+                                    <div className="absolute top-0 right-0 w-20 h-20 bg-terracotta/10 rounded-bl-full" />
 
-                                <h3 className="font-serif text-2xl text-terracotta mb-6 flex items-center gap-3">
-                                    <span className="w-8 h-[1px] bg-terracotta"></span>
-                                    Informations pratiques
-                                </h3>
+                                    <h3 className="font-serif text-2xl text-terracotta mb-6 flex items-center gap-3">
+                                        <span className="w-8 h-[1px] bg-terracotta"></span>
+                                        Informations pratiques
+                                    </h3>
 
-                                <ul className="space-y-4">
-                                    <li className="flex items-start gap-3">
-                                        <MapPin className="text-terracotta shrink-0 mt-1" size={20} />
-                                        <div>
-                                            <span className="font-medium text-charcoal block">Lieu</span>
-                                            <span className="text-charcoal/70 text-sm">Café littéraire La Habana, Bouhanak les 400, Palais des poètes, Tlemcen, 13000</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start gap-3">
-                                        <Calendar className="text-terracotta shrink-0 mt-1" size={20} />
-                                        <div>
-                                            <span className="font-medium text-charcoal block">Date</span>
-                                            <span className="text-charcoal/70 text-sm">7 février 2026</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-center gap-3">
-                                        <Clock className="text-terracotta shrink-0" size={20} />
-                                        <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Horaire :</strong> 9h30</span>
-                                    </li>
-                                    <li className="flex items-center gap-3">
-                                        <Hourglass className="text-terracotta shrink-0" size={20} />
-                                        <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Durée :</strong> 3 heures</span>
-                                    </li>
-                                    <li className="flex items-center gap-3">
-                                        <Banknote className="text-terracotta shrink-0" size={20} />
-                                        <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Tarif :</strong> 1 200 DA – paiement sur place</span>
-                                    </li>
-                                    <li className="flex items-start gap-3">
-                                        <Users className="text-terracotta shrink-0 mt-1" size={20} />
-                                        <div>
-                                            <span className="font-medium text-charcoal block">Public</span>
-                                            <span className="text-charcoal/70 text-sm">Adultes et adolescents à partir de 16 ans</span>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start gap-3">
-                                        <Star className="text-terracotta shrink-0 mt-1" size={20} />
-                                        <div>
-                                            <span className="font-medium text-charcoal block">Niveau</span>
-                                            <span className="text-charcoal/70 text-sm">Accessible à tous, débutants bienvenus</span>
-                                        </div>
-                                    </li>
+                                    <ul className="space-y-4">
+                                        <li className="flex items-start gap-3">
+                                            <MapPin className="text-terracotta shrink-0 mt-1" size={20} />
+                                            <div>
+                                                <span className="font-medium text-charcoal block">Lieu</span>
+                                                <span className="text-charcoal/70 text-sm">{upcomingWorkshop.location}</span>
+                                            </div>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <Calendar className="text-terracotta shrink-0 mt-1" size={20} />
+                                            <div>
+                                                <span className="font-medium text-charcoal block">Date</span>
+                                                <span className="text-charcoal/70 text-sm">{upcomingWorkshop.date}</span>
+                                            </div>
+                                        </li>
+                                        <li className="flex items-center gap-3">
+                                            <Clock className="text-terracotta shrink-0" size={20} />
+                                            <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Horaire :</strong> {upcomingWorkshop.time}</span>
+                                        </li>
+                                        {upcomingWorkshop.duration && (
+                                            <li className="flex items-center gap-3">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-terracotta shrink-0"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                                <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Durée :</strong> {upcomingWorkshop.duration}</span>
+                                            </li>
+                                        )}
+                                        <li className="flex items-center gap-3">
+                                            <Banknote className="text-terracotta shrink-0" size={20} />
+                                            <span className="text-charcoal/70 text-sm"><strong className="text-charcoal font-medium">Tarif :</strong> {upcomingWorkshop.price} – paiement sur place</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <Users className="text-terracotta shrink-0 mt-1" size={20} />
+                                            <div>
+                                                <span className="font-medium text-charcoal block">Public</span>
+                                                <span className="text-charcoal/70 text-sm">{upcomingWorkshop.audience || "Adultes et adolescents à partir de 16 ans"}</span>
+                                            </div>
+                                        </li>
+                                        {upcomingWorkshop.level && (
+                                            <li className="flex items-start gap-3">
+                                                <Star className="text-terracotta shrink-0 mt-1" size={20} />
+                                                <div>
+                                                    <span className="font-medium text-charcoal block">Niveau</span>
+                                                    <span className="text-charcoal/70 text-sm">{upcomingWorkshop.level}</span>
+                                                </div>
+                                            </li>
+                                        )}
+                                    </ul>
 
-                                </ul>
-
-                                <div className="mt-8 pt-6 border-t border-terracotta/10">
-                                    <a
-                                        href="/contact"
-                                        className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-terracotta text-white px-8 py-4 rounded-full font-medium uppercase tracking-widest text-sm hover:bg-terracotta/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group"
-                                    >
-                                        <Ticket className="group-hover:animate-pulse" size={20} />
-                                        Réserver ma place
-                                    </a>
+                                    <div className="mt-8 pt-6 border-t border-terracotta/10">
+                                        <a
+                                            href="/contact"
+                                            className="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-terracotta text-white px-8 py-4 rounded-full font-medium uppercase tracking-widest text-sm hover:bg-terracotta/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group"
+                                        >
+                                            <Ticket className="group-hover:animate-pulse" size={20} />
+                                            Réserver ma place
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="text-white text-center py-20">
+                            <h3 className="font-serif text-2xl mb-4">Aucun atelier programmé pour le moment.</h3>
+                            <p className="text-white/80">Revenez bientôt pour découvrir nos prochains événements !</p>
+                        </div>
+                    )}
                 </div>
             </section>
 
