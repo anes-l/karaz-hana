@@ -27,6 +27,7 @@ async function processDir(dir) {
                 } catch {
                     console.log(`Processing ${file}...`);
                     await sharp(inputPath)
+                        .rotate()
                         .resize({ height: 400, withoutEnlargement: true })
                         .webp({ quality: 75 })
                         .toFile(outputPath);
