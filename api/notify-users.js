@@ -63,7 +63,7 @@ export default async function handler(request, response) {
         });
 
         // Email Template (using site design)
-        const htmlContent = \`
+        const htmlContent = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -92,28 +92,28 @@ export default async function handler(request, response) {
                 </div>
                 <div class="content">
                     <span class="tag">Nouvel Atelier</span>
-                    <h2 class="h2">\${workshop.title}</h2>
+                    <h2 class="h2">${workshop.title}</h2>
                     <p>Bonjour,</p>
                     <p>J'ai le plaisir de vous annoncer l'ouverture des inscriptions pour mon prochain atelier d'aquarelle !</p>
                     
-                    \${workshop.imageUrl ? \`<div class="image-container"><img src="\${workshop.imageUrl}" alt="\${workshop.title}" class="image"/></div>\` : ''}
+                    ${workshop.imageUrl ? `<div class="image-container"><img src="${workshop.imageUrl}" alt="${workshop.title}" class="image"/></div>` : ''}
                     
                     <div class="details">
                         <div class="detail-row">
                             <span class="detail-label">Date :</span>
-                            <span>\${workshop.date}</span>
+                            <span>${workshop.date}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Heure :</span>
-                            <span>\${workshop.time}</span>
+                            <span>${workshop.time}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Lieu :</span>
-                            <span>\${workshop.location}</span>
+                            <span>${workshop.location}</span>
                         </div>
                     </div>
                     
-                    <p>\${workshop.description || "Un moment de créativité et de partage vous attend."}</p>
+                    <p>${workshop.description || "Un moment de créativité et de partage vous attend."}</p>
                     
                     <div style="text-align: center;">
                         <a href="https://karazhana.vercel.app/ateliers" class="btn">Réserver ma place</a>
@@ -126,13 +126,13 @@ export default async function handler(request, response) {
             </div>
         </body>
         </html>
-        \`;
+        `;
 
         // Send emails (using BCC to hide recipients from each other)
         await transporter.sendMail({
-            from: \`"Karaz Hana" <\${process.env.GMAIL_USER}>\`,
+            from: `"Karaz Hana" <${process.env.GMAIL_USER}>`,
             bcc: emails, // Use BCC for privacy
-            subject: \`Nouvel Atelier : \${workshop.title} 🎨\`,
+            subject: `Nouvel Atelier : ${workshop.title} 🎨`,
             html: htmlContent
         });
 

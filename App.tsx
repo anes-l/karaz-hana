@@ -6,6 +6,7 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Shop } from './pages/Shop';
 import { Ateliers } from './pages/Ateliers';
+import { Contact } from './pages/Contact';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { AuthProvider } from './contexts/AuthContext';
@@ -27,7 +28,7 @@ const App: React.FC = () => {
             <Route path="/accueil" element={<Home />} />
             <Route path="/boutique" element={<Shop />} />
             <Route path="/ateliers" element={<Ateliers />} />
-            <Route path="/contact" element={<UnderConstruction page="Contact" />} />
+            <Route path="/contact" element={<Contact />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />

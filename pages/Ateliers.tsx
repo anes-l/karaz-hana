@@ -191,9 +191,7 @@ export const Ateliers: React.FC = () => {
                                             <p className="italic opacity-70">Plus de détails bientôt...</p>
                                         )}
 
-                                        <p className="font-bold text-white pt-2">
-                                            Tout le matériel est fourni.
-                                        </p>
+
                                     </div>
 
                                     {/* Bouton Voir Plus - Masqué si pas de détails supplémentaires */}

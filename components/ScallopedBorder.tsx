@@ -16,7 +16,7 @@ export const ScallopedBorder: React.FC<ScallopedBorderProps> = ({
   return (
     <div className={`w-full overflow-hidden leading-none ${isTop ? 'rotate-180' : ''} ${className}`}>
       <svg
-        className="block w-full h-[12px] md:h-[20px]"
+        className="block w-full h-[25px] md:h-[35px]"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid slice"
       >

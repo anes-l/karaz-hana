@@ -72,7 +72,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center justify-end gap-4">
             {/* Admin Link if role is admin */}
             {userRole === 'admin' && (
-              <Link to="/gestion" className={`hidden md:flex items-center gap-1 transition-colors ${textColor} ${hoverColor}`} title="Administration">
+              <Link to="/gestion" className={`hidden md:flex items-center gap-1 transition-colors ${textColor} ${hoverColor}`} title="Gestion">
                 <Shield size={20} />
               </Link>
             )}
@@ -102,7 +102,7 @@ export const Header: React.FC = () => {
                           className="flex items-center w-full px-4 py-2 text-sm text-charcoal/80 hover:bg-cream/50 hover:text-terracotta transition-colors"
                         >
                           <Shield size={16} className="mr-2" />
-                          Administration
+                          Gestion
                         </Link>
                       )}
                       <button
@@ -175,7 +175,7 @@ export const Header: React.FC = () => {
           {/* Mobile Admin Link */}
           {userRole === 'admin' && (
             <Link to="/gestion" onClick={() => setMobileMenuOpen(false)} className="text-lg font-serif text-terracotta hover:text-terracotta/80 transition-colors mt-2">
-              Administration
+              Gestion
             </Link>
           )}
           {!currentUser && (
