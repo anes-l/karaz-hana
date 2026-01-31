@@ -36,6 +36,95 @@ export const Ateliers: React.FC = () => {
     const [lightboxImage, setLightboxImage] = React.useState<string | null>(null);
     const [touchEnd, setTouchEnd] = React.useState(0);
 
+    // Auto-scroll logic
+    const scrollRef1 = React.useRef<HTMLDivElement>(null);
+    const scrollRef2 = React.useRef<HTMLDivElement>(null);
+    const scrollRef3 = React.useRef<HTMLDivElement>(null);
+
+    // Auto-scroll logic helper - Simplified and Robust
+    const useAutoScroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right' = 'left', speed = 1.0, isLightboxOpen: boolean) => {
+        const isPaused = React.useRef(false);
+        const isDragging = React.useRef(false);
+        const startX = React.useRef(0);
+        const scrollLeftStart = React.useRef(0);
+
+        React.useEffect(() => {
+            const el = ref.current;
+            if (!el) return;
+
+            // Give images some time to load before measuring
+            const timeout = setTimeout(() => {
+                if (el && direction === 'right' && el.scrollLeft === 0) {
+                    el.scrollLeft = el.scrollWidth / 2;
+                }
+            }, 500);
+
+            let animationId: number;
+            const animate = () => {
+                const currentEl = ref.current;
+                if (!currentEl || isPaused.current || isDragging.current || isLightboxOpen) {
+                    animationId = requestAnimationFrame(animate);
+                    return;
+                }
+
+                const halfWidth = currentEl.scrollWidth / 2;
+                if (halfWidth > 0) {
+                    if (direction === 'left') {
+                        currentEl.scrollLeft += speed;
+                        if (currentEl.scrollLeft >= halfWidth) currentEl.scrollLeft -= halfWidth;
+                    } else {
+                        currentEl.scrollLeft -= speed;
+                        if (currentEl.scrollLeft <= 0) currentEl.scrollLeft += halfWidth;
+                    }
+                }
+                animationId = requestAnimationFrame(animate);
+            };
+
+            animationId = requestAnimationFrame(animate);
+            return () => {
+                cancelAnimationFrame(animationId);
+                clearTimeout(timeout);
+            };
+        }, [direction, speed, isLightboxOpen]);
+
+        const onMouseDown = (e: React.MouseEvent) => {
+            if (!ref.current) return;
+            isDragging.current = true;
+            startX.current = e.pageX - ref.current.offsetLeft;
+            scrollLeftStart.current = ref.current.scrollLeft;
+            isPaused.current = true;
+        };
+
+        const onMouseMove = (e: React.MouseEvent) => {
+            if (!isDragging.current || !ref.current) return;
+            e.preventDefault();
+            const x = e.pageX - ref.current.offsetLeft;
+            const walk = (x - startX.current) * 2;
+            ref.current.scrollLeft = scrollLeftStart.current - walk;
+        };
+
+        const stopDragging = () => {
+            isDragging.current = false;
+        };
+
+        return {
+            onMouseEnter: () => { isPaused.current = true; },
+            onMouseLeave: () => {
+                isPaused.current = false;
+                stopDragging();
+            },
+            onMouseDown,
+            onMouseMove,
+            onMouseUp: stopDragging,
+            onTouchStart: () => { isPaused.current = true; },
+            onTouchEnd: () => { isPaused.current = false; },
+            style: { touchAction: 'pan-x', scrollBehavior: 'auto' } as React.CSSProperties
+        };
+    };
+
+    const scrollProps1 = useAutoScroll(scrollRef1, 'left', 1.0, !!lightboxImage);
+    const scrollProps2 = useAutoScroll(scrollRef2, 'right', 1.0, !!lightboxImage);
+    const scrollProps3 = useAutoScroll(scrollRef3, 'left', 1.0, !!lightboxImage);
     const slides = [
         {
             type: 'video',
@@ -316,7 +405,7 @@ export const Ateliers: React.FC = () => {
                         </div>
 
                         <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-6">
-                            Moments capturés
+                            Moments de Création
                         </h2>
                     </div>
 
@@ -354,121 +443,295 @@ export const Ateliers: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Section Inscription - Handmade Style */}
+                    <div className="max-w-4xl mx-auto mb-20 md:mb-32 relative px-4">
+
+                        {/* Elements décoratifs d'arrière-plan */}
+                        <div className="absolute top-0 right-10 text-terracotta/10 -z-10">
+                            <svg width="150" height="150" viewBox="0 0 200 200">
+                                <path d="M40,100 Q100,20 160,100 T280,100" fill="none" stroke="currentColor" strokeWidth="20" strokeLinecap="round" opacity="0.6" />
+                            </svg>
+                        </div>
+                        <div className="absolute -bottom-10 left-0 text-sage/10 -z-10">
+                            <svg width="200" height="200" viewBox="0 0 200 200" fill="currentColor">
+                                <circle cx="100" cy="100" r="80" />
+                            </svg>
+                        </div>
+
+                        <div className="relative bg-[#fffdf9] p-8 md:p-12 rounded-sm shadow-[2px_2px_15px_rgba(0,0,0,0.08)] border border-charcoal/5 mx-auto max-w-3xl">
+
+                            {/* Effet Scotch */}
+                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-32 h-10 bg-white/40 backdrop-blur-[2px] shadow-sm border-l border-r border-white/60 z-10" />
+
+                            <h3 className="font-serif text-3xl md:text-4xl text-charcoal mb-8 text-center" style={{ fontFamily: 'Georgia, serif' }}>
+                                Comment participer ?
+                            </h3>
+
+                            <div className="space-y-8">
+                                <div className="text-center space-y-4">
+                                    <p className="font-sans text-lg text-charcoal/80 leading-relaxed">
+                                        J’organise <span className="font-serif italic text-xl text-terracotta">un à deux ateliers</span> par mois.
+                                    </p>
+                                    <p className="font-sans text-charcoal/70">
+                                        Les places partent vite à chaque nouvelle annonce !
+                                    </p>
+                                </div>
+
+                                <div className="bg-sage/5 p-6 rounded-lg border-2 border-dashed border-sage/20 relative">
+                                    <div className="absolute -top-3 -left-3 text-2xl">📌</div>
+                                    <h4 className="font-serif text-lg text-charcoal mb-4 flex items-center gap-2">
+                                        La marche à suivre :
+                                    </h4>
+                                    <ul className="space-y-4 font-sans text-charcoal/80">
+                                        <li className="flex gap-3">
+                                            <span className="font-serif italic text-terracotta font-bold text-lg">1.</span>
+                                            <span>
+                                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-terracotta font-medium hover:underline decoration-wavy underline-offset-4">Suivez-moi sur Instagram</a> pour voir les dates en premier.
+                                            </span>
+                                        </li>
+                                        <li className="flex gap-3">
+                                            <span className="font-serif italic text-terracotta font-bold text-lg">2.</span>
+                                            <span>
+                                                Une fois l'annonce faite, revenez ici pour réserver votre place.
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-6 border-t border-charcoal/10 text-center">
+                                    <p className="font-serif text-xl text-charcoal mb-2">
+                                        Ne ratez aucun atelier !
+                                    </p>
+                                    <p className="text-sm text-charcoal/60 mb-6 max-w-md mx-auto">
+                                        Créez votre compte membre gratuitement pour être notifié par email dès qu'une nouvelle date est en ligne.
+                                    </p>
+
+                                    <a
+                                        href="/signup"
+                                        className="inline-block px-8 py-4 bg-charcoal text-white rounded-full font-medium tracking-wide hover:bg-terracotta transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-xl"
+                                    >
+                                        Créer mon compte membre
+                                    </a>
+                                    <p className="mt-3 text-xs text-charcoal/40 italic">
+                                        C'est gratuit et ça prend 30 secondes.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
 
                 <div className="max-w-6xl mx-auto">
-                    {/* Styles pour l'animation marquee */}
+                    {/* Titre Galerie */}
+                    <div className="text-center mb-4">
+                        <h2 className="font-serif text-3xl md:text-5xl text-charcoal">
+                            Galerie des ateliers
+                        </h2>
+                    </div>
+                    {/* Video Slider moved here */}
+                    {/* Styles pour cacher la scrollbar */}
                     <style>{`
-                        @keyframes marquee {
-                            0% { transform: translateX(0); }
-                            100% { transform: translateX(-50%); }
+                        .no-scrollbar::-webkit-scrollbar {
+                            display: none;
                         }
-                        @keyframes marquee-reverse {
-                            0% { transform: translateX(-50%); }
-                            100% { transform: translateX(0); }
-                        }
-                        .animate-marquee {
-                            animation: marquee 40s linear infinite;
-                        }
-                        .animate-marquee-reverse {
-                            animation: marquee-reverse 40s linear infinite;
-                        }
-                        .marquee-paused {
-                            animation-play-state: paused !important;
+                        .no-scrollbar {
+                            -ms-overflow-style: none;
+                            scrollbar-width: none;
                         }
                     `}</style>
-                    <div className="relative w-[99vw] left-[50%] right-[50%] -ml-[49.5vw] -mr-[49.5vw] overflow-hidden">
-                        {/* Row 1: Octobre Rose */}
-                        <div className="flex items-center justify-center gap-4 mb-6">
-                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40">
-                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                            <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Octobre Rose</h3>
-                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40 rotate-180">
-                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
+
+                    {/* Simple Separator Top */}
+                    <div className="flex justify-center mb-8 opacity-20">
+                        <svg width="400" height="20" viewBox="0 0 400 20" className="text-charcoal">
+                            <path d="M0,10 Q50,0 100,10 T200,10 T300,10 T400,10" fill="none" stroke="currentColor" strokeWidth="2" />
+                        </svg>
+                    </div>
+
+                    <div className="relative w-[100vw] left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] mb-12 group h-[60vh] md:h-[80vh] overflow-hidden"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
+
+                        {slides.map((slide, index) => (
+                            <div
+                                key={index}
+                                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                                    }`}
+                            >
+                                <div className="absolute inset-0 bg-sage/30">
+                                    <video
+                                        className="w-full h-full object-cover"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        poster={slide.poster}
+                                    >
+                                        <source src={slide.src} type="video/mp4" />
+                                    </video>
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-charcoal/40" />
+                                </div>
+
+                                {/* Contenu Texte */}
+                                <div className="absolute inset-0 flex items-center justify-center text-center px-12 md:px-20">
+                                    <div className="transform transition-all duration-700 translate-y-0 opacity-100">
+                                        <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 drop-shadow-lg">
+                                            {slide.title}
+                                        </h2>
+                                        <p className="font-sans text-white/90 text-lg md:text-xl max-w-xl mx-auto drop-shadow-md">
+                                            {slide.subtitle}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Navigation Arrows (Desktop) */}
+                        <button
+                            onClick={prevSlide}
+                            className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 items-center justify-center text-white hover:scale-110 transition-transform drop-shadow-lg"
+                            aria-label="Previous slide"
+                        >
+                            <ChevronLeft size={48} />
+                        </button>
+
+                        <button
+                            onClick={nextSlide}
+                            className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 items-center justify-center text-white hover:scale-110 transition-transform drop-shadow-lg"
+                            aria-label="Next slide"
+                        >
+                            <ChevronRight size={48} />
+                        </button>
+
+                        {/* Indicateurs (Dots) */}
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+                            {slides.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentSlide(index)}
+                                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white scale-110' : 'bg-white/40 hover:bg-white/60'
+                                        }`}
+                                    aria-label={`Go to slide ${index + 1}`}
+                                />
+                            ))}
                         </div>
-                        <div className="flex mb-6 overflow-hidden">
-                            <div className={`flex animate-marquee ${lightboxImage ? 'marquee-paused' : ''}`}>
+
+                    </div>
+
+                    {/* Simple Separator Bottom */}
+                    <div className="flex justify-center mt-4 mb-4 opacity-20">
+                        <svg width="400" height="20" viewBox="0 0 400 20" className="text-charcoal">
+                            <path d="M0,10 Q50,20 100,10 T200,10 T300,10 T400,10" fill="none" stroke="currentColor" strokeWidth="2" />
+                        </svg>
+                    </div>
+
+                    <div className="relative w-[100vw] left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] overflow-hidden space-y-10">
+                        {/* Row 1: Octobre Rose */}
+                        <div>
+                            <div className="flex items-center justify-center gap-4 mb-4">
+                                <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40">
+                                    <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                                <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Octobre Rose</h3>
+                                <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40 rotate-180">
+                                    <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                            </div>
+                            <div
+                                className="flex overflow-x-auto no-scrollbar gap-4 px-4 pb-4 cursor-grab active:cursor-grabbing"
+                                ref={scrollRef1}
+                                {...scrollProps1}
+                            >
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
-                                        <img src="/octobre rose/1769554013942_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554013942.jpg')} />
-                                        <img src="/octobre rose/1769554013984_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554013984.jpg')} />
-                                        <img src="/octobre rose/1769554014020_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554014020.jpg')} />
-                                        <img src="/octobre rose/1769554014050_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554014050.jpg')} />
-                                        <img src="/octobre rose/1769554014080_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/1769554014080.jpg')} />
-                                        <img src="/octobre rose/WhatsApp Image 2025-10-16 at 20.18.47_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/octobre rose/WhatsApp Image 2025-10-16 at 20.18.47.jpeg')} />
+                                        <img src="/octobre rose/1769554013942_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/octobre rose/1769554013942.jpg')} draggable="false" />
+                                        <img src="/octobre rose/1769554013984_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/octobre rose/1769554013984.jpg')} draggable="false" />
+                                        <img src="/octobre rose/1769554014020_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/octobre rose/1769554014020.jpg')} draggable="false" />
+                                        <img src="/octobre rose/1769554014050_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/octobre rose/1769554014050.jpg')} draggable="false" />
+                                        <img src="/octobre rose/1769554014080_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/octobre rose/1769554014080.jpg')} draggable="false" />
+                                        <img src="/octobre rose/WhatsApp Image 2025-10-16 at 20.18.47_thumb.webp" alt="Octobre Rose" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/octobre rose/WhatsApp Image 2025-10-16 at 20.18.47.jpeg')} draggable="false" />
                                     </React.Fragment>
                                 ))}
                             </div>
                         </div>
 
                         {/* Séparateur aquarelle */}
-                        <div className="flex items-center justify-center my-10">
-                            <svg width="200" height="20" viewBox="0 0 200 20" className="text-terracotta/15">
+                        <div className="flex items-center justify-center opacity-30">
+                            <svg width="200" height="20" viewBox="0 0 200 20" className="text-terracotta">
                                 <path d="M0,10 Q25,2 50,10 Q75,18 100,10 Q125,2 150,10 Q175,18 200,10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                             </svg>
                         </div>
 
                         {/* Row 2: Valentine (Reverse) */}
-                        <div className="flex items-center justify-center gap-4 mb-6">
-                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40">
-                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                            <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Valentine</h3>
-                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40 rotate-180">
-                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                        </div>
-                        <div className="flex mb-6 overflow-hidden">
-                            <div className={`flex animate-marquee-reverse ${lightboxImage ? 'marquee-paused' : ''}`}>
+                        <div>
+                            <div className="flex items-center justify-center gap-4 mb-4">
+                                <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40">
+                                    <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                                <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Valentine</h3>
+                                <svg width="30" height="10" viewBox="0 0 30 10" className="text-dusty-pink/40 rotate-180">
+                                    <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                            </div>
+                            <div
+                                className="flex overflow-x-auto no-scrollbar gap-4 px-4 pb-4 cursor-grab active:cursor-grabbing"
+                                ref={scrollRef2}
+                                {...scrollProps2}
+                            >
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
-                                        <img src="/valentine/valentine_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine.jpg')} />
-                                        <img src="/valentine/valentine(1)_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine(1).jpg')} />
-                                        <img src="/valentine/valentine(2)_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine(2).jpg')} />
-                                        <img src="/valentine/valentine(3)_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/valentine(3).jpg')} />
-                                        <img src="/valentine/1769441541619_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541619.jpg')} />
-                                        <img src="/valentine/1769441541793_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541793.JPG')} />
-                                        <img src="/valentine/1769441541812_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541812.JPG')} />
-                                        <img src="/valentine/1769441541833_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541833.JPG')} />
-                                        <img src="/valentine/1769441541851_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541851.JPG')} />
-                                        <img src="/valentine/1769441541890_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/valentine/1769441541890.JPG')} />
+                                        <img src="/valentine/valentine_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/valentine.jpg')} draggable="false" />
+                                        <img src="/valentine/valentine(1)_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/valentine(1).jpg')} draggable="false" />
+                                        <img src="/valentine/valentine(2)_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/valentine(2).jpg')} draggable="false" />
+                                        <img src="/valentine/valentine(3)_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/valentine(3).jpg')} draggable="false" />
+                                        <img src="/valentine/1769441541619_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/1769441541619.jpg')} draggable="false" />
+                                        <img src="/valentine/1769441541793_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/1769441541793.JPG')} draggable="false" />
+                                        <img src="/valentine/1769441541812_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/1769441541812.JPG')} draggable="false" />
+                                        <img src="/valentine/1769441541833_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/1769441541833.JPG')} draggable="false" />
+                                        <img src="/valentine/1769441541851_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/1769441541851.JPG')} draggable="false" />
+                                        <img src="/valentine/1769441541890_thumb.webp" alt="Valentine" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/valentine/1769441541890.JPG')} draggable="false" />
                                     </React.Fragment>
                                 ))}
                             </div>
                         </div>
 
                         {/* Séparateur aquarelle */}
-                        <div className="flex items-center justify-center my-10">
-                            <svg width="200" height="20" viewBox="0 0 200 20" className="text-sage/20">
+                        <div className="flex items-center justify-center opacity-30">
+                            <svg width="200" height="20" viewBox="0 0 200 20" className="text-sage">
                                 <path d="M0,10 Q25,2 50,10 Q75,18 100,10 Q125,2 150,10 Q175,18 200,10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                             </svg>
                         </div>
 
                         {/* Row 3: Plein Air */}
-                        <div className="flex items-center justify-center gap-4 mb-6">
-                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-sage/40">
-                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                            <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Plein Air</h3>
-                            <svg width="30" height="10" viewBox="0 0 30 10" className="text-sage/40 rotate-180">
-                                <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                        </div>
-                        <div className="flex overflow-hidden">
-                            <div className={`flex animate-marquee ${lightboxImage ? 'marquee-paused' : ''}`}>
+                        <div>
+                            <div className="flex items-center justify-center gap-4 mb-4">
+                                <svg width="30" height="10" viewBox="0 0 30 10" className="text-sage/40">
+                                    <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                                <h3 className="text-2xl md:text-3xl font-serif italic text-charcoal/70 tracking-wide">Plein Air</h3>
+                                <svg width="30" height="10" viewBox="0 0 30 10" className="text-sage/40 rotate-180">
+                                    <path d="M0,5 Q7,0 15,5 Q23,10 30,5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                                </svg>
+                            </div>
+                            <div
+                                className="flex overflow-x-auto no-scrollbar gap-4 px-4 pb-4 cursor-grab active:cursor-grabbing"
+                                ref={scrollRef3}
+                                {...scrollProps3}
+                            >
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
-                                        <img src="/plein air/DSC05954_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05954.JPG')} />
-                                        <img src="/plein air/DSC05976_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05976.JPG')} />
-                                        <img src="/plein air/DSC05977_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05977.JPG')} />
-                                        <img src="/plein air/DSC05982_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC05982.JPG')} />
-                                        <img src="/plein air/DSC06030_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06030.JPG')} />
-                                        <img src="/plein air/DSC06041_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06041.JPG')} />
-                                        <img src="/plein air/DSC06116_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06116.JPG')} />
-                                        <img src="/plein air/DSC06219_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover mx-2 rounded-sm cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setLightboxImage('/plein air/DSC06219.JPG')} />
+                                        <img src="/plein air/DSC05954_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC05954.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC05976_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC05976.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC05977_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC05977.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC05982_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC05982.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC06030_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC06030.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC06041_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC06041.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC06116_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC06116.JPG')} draggable="false" />
+                                        <img src="/plein air/DSC06219_thumb.webp" alt="Plein Air" className="h-56 md:h-72 w-auto object-cover rounded-sm hover:opacity-90 transition-opacity flex-shrink-0" onClick={() => setLightboxImage('/plein air/DSC06219.JPG')} draggable="false" />
                                     </React.Fragment>
                                 ))}
                             </div>
@@ -499,78 +762,7 @@ export const Ateliers: React.FC = () => {
                 </div>
             </section>
 
-            {/* Section Vidéo Slider */}
-            <section
-                className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden group"
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-            >
-                {slides.map((slide, index) => (
-                    <div
-                        key={index}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                            }`}
-                    >
-                        <div className="absolute inset-0 bg-sage/30">
-                            <video
-                                className="w-full h-full object-cover"
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                poster={slide.poster}
-                            >
-                                <source src={slide.src} type="video/mp4" />
-                            </video>
-                            {/* Overlay */}
-                            <div className="absolute inset-0 bg-charcoal/40" />
-                        </div>
 
-                        {/* Contenu Texte */}
-                        <div className="absolute inset-0 flex items-center justify-center text-center px-12 md:px-20">
-                            <div className="transform transition-all duration-700 translate-y-0 opacity-100">
-                                <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-4 drop-shadow-lg">
-                                    {slide.title}
-                                </h2>
-                                <p className="font-sans text-white/90 text-lg md:text-xl max-w-xl mx-auto drop-shadow-md">
-                                    {slide.subtitle}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-
-                {/* Navigation Arrows (Desktop) */}
-                <button
-                    onClick={prevSlide}
-                    className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 items-center justify-center text-white hover:scale-110 transition-transform drop-shadow-lg"
-                    aria-label="Previous slide"
-                >
-                    <ChevronLeft size={48} />
-                </button>
-
-                <button
-                    onClick={nextSlide}
-                    className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 items-center justify-center text-white hover:scale-110 transition-transform drop-shadow-lg"
-                    aria-label="Next slide"
-                >
-                    <ChevronRight size={48} />
-                </button>
-
-                {/* Indicateurs (Dots) */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-                    {slides.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => setCurrentSlide(index)}
-                            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white scale-110' : 'bg-white/40 hover:bg-white/60'
-                                }`}
-                            aria-label={`Go to slide ${index + 1}`}
-                        />
-                    ))}
-                </div>
-            </section>
 
             {/* Ateliers Personnalisés */}
             <section className="py-24 md:py-32 px-4 bg-gradient-to-br from-sage/5 via-cream to-dusty-pink/10 relative overflow-hidden">
